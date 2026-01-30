@@ -73,13 +73,15 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
   );
 
   const extendedCommentsData = commentData.map((obj) => {
+    const id = findPropWhereMatches(
+      "article_id",
+      "title",
+      obj.article_title,
+      articles.rows,
+    );
+
     const newObj = Object.assign({
-      article_id: findPropWhereMatches(
-        "article_id",
-        "title",
-        obj.article_title,
-        articles.rows,
-      ),
+      article_id: id,
       ...obj,
     });
 
