@@ -5,6 +5,12 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
   console.log("seed function invoked");
   // DROP TABLES IF EXIST
   await db.query(`
+    DROP TABLE IF EXISTS emoji_article_user;
+    `);
+  await db.query(`
+    DROP TABLE IF EXISTS emojis;
+    `);
+  await db.query(`
     DROP TABLE IF EXISTS comments;
     `);
   await db.query(`
@@ -92,5 +98,23 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
 
   // Insert comments data
   await db.query(getTableDataInsertionQuery("comments", extendedCommentsData));
+
+  // Create emoji table
+  await db.query(`
+    CREATE TABLE emojis (
+      emoji_id SERIAL PRIMARY KEY,
+      emoji VARCHAR NOT NULL
+    )
+    `);
+
+  // Create emoji_article_user table
+  await db.query(`
+    CREATE TABLE emoji_article_user (
+      emoji_article_user_id SERIAL PRIMARY KEY,
+      emoji_id INT REFERENCES emojis(emoji_id),
+      username VARCHAR REFERENCES users(username),
+      article_id INT REFERENCES articles(article_id)
+    )
+    `);
 };
 module.exports = seed;
