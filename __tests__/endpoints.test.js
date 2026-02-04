@@ -33,4 +33,13 @@ describe("GET /api/articles/:article_id", () => {
         expect(typeof article.article_img_url).toBe("string");
       });
   });
+  test("Should return 404 Not Found if id not found", () => {
+    return request(app)
+      .get("/api/articles/100")
+      .expect(404)
+      .then((res) => {
+        const { msg } = res.body;
+        expect(msg).toBe("Article not found!");
+      });
+  });
 });

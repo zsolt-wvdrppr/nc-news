@@ -11,5 +11,6 @@ exports.getAllArticles = async (req, res) => {
 exports.getArticleById = async (req, res) => {
   const { articleId } = req.params;
   const article = await getARticleByIdService(articleId);
-  res.status(200).send({ article });
+  const statusCode = article.status || 200;
+  res.status(statusCode).send(article.msg ? { msg: article.msg } : { article });
 };
