@@ -84,3 +84,36 @@ describe("GET /api/articles/:article_id", () => {
     return request(app).get("/api/articles/asdf").expect(400);
   });
 });
+
+describe("GET: /api/articles/:article_id/comments", () => {
+  test("200: Responds with an array on the key of articles", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).toBeArray();
+      });
+  });
+  test("200: Comments array contains 11 comments (of article id=1)", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).toHaveLength(11);
+      });
+  });
+  test("200: Each article object has props: article_id, body, votes, author, created_at", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        comments.forEach((comment) => {
+          expect(comment.article_id).toBe(1);
+          expect(comment.body).toBeString();
+          expect(comment.votes).toBeNumber();
+          expect(comment.author).toBeString();
+          expect(comment.created_at).toBeString();
+        });
+      });
+  });
+});

@@ -10,6 +10,13 @@ exports.fetchArticleById = async (article_id) => {
     "SELECT * FROM articles WHERE article_id = $1",
     [article_id],
   );
-
   return result.rows[0];
+};
+
+exports.fetchCommentsByArticleId = async (article_id) => {
+  const result = await db.query(
+    "SELECT * FROM comments WHERE article_id = $1",
+    [article_id],
+  );
+  return result.rows;
 };
