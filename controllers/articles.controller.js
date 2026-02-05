@@ -8,9 +8,13 @@ exports.getAllArticles = async (req, res) => {
   res.status(200).send({ articles });
 };
 
-exports.getArticleById = async (req, res) => {
+exports.getArticleById = async (req, res, next) => {
   const { articleId } = req.params;
-  const article = await getARticleByIdService(articleId);
-  const statusCode = article.status || 200;
-  res.status(statusCode).send(article.msg ? { msg: article.msg } : { article });
+
+  try {
+    const article = await getARticleByIdService(articleId);
+    res.status(200).send({ article });
+  } catch (err) {
+    next(err);
+  }
 };

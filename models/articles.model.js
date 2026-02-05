@@ -11,9 +11,5 @@ exports.fetchArticleById = async (article_id) => {
     [article_id],
   );
 
-  if (result.rows.length === 0) {
-    return { status: 404, msg: "Article not found!" };
-  }
-
   return result.rows[0];
 };
