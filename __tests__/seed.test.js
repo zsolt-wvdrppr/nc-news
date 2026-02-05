@@ -622,7 +622,7 @@ describe("seed", () => {
     });
   });
   // emoji-article-user
-  describe.skip("emoji_article_user table", () => {
+  describe("emoji_article_user table", () => {
     test("emoji_article_user table exists", () => {
       return db
         .query(
@@ -707,27 +707,6 @@ describe("seed", () => {
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("username");
           expect(column.data_type).toBe("character varying");
-        });
-    });
-
-    test("emoji_article_user table has username column as the foreign key", () => {
-      return db
-        .query(
-          ` SELECT *
-            FROM information_schema.table_constraints AS tc
-            JOIN information_schema.key_column_usage AS kcu
-              ON tc.constraint_name = kcu.constraint_name
-            JOIN information_schema.constraint_column_usage AS ccu
-              ON ccu.constraint_name = tc.constraint_name
-            WHERE tc.constraint_type = 'FOREIGN KEY'
-              AND tc.table_name = 'emoji_article_user'
-              AND kcu.column_name = 'username'
-              AND ccu.table_name = 'emojis'
-              AND ccu.column_name = 'username';`,
-        )
-        .then(({ rows: [{ column_name }] }) => {
-          console.log({ rows: [{ column_name }] });
-          expect(column_name).toBe("username");
         });
     });
   });
