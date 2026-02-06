@@ -3,6 +3,7 @@ const seed = require("../db/seeds/seed.js");
 const data = require("../db/data/test-data/index.js");
 const request = require("supertest");
 const app = require("../app.js");
+const { fetchUserByUsername } = require("../models/users.model.js");
 
 beforeEach(() => {
   return seed(data);
@@ -40,5 +41,18 @@ describe("GET: /api/users", () => {
           expect(user.avatar_url).toBeString();
         });
       });
+  });
+});
+
+describe("Model testing: fetchUserByUsername()", () => {
+  test("Should return an object if existing username was passed in", () => {
+    return fetchUserByUsername("rogersop").then((res) => {
+      expect(res).toBeObject();
+    });
+  });
+  test("Should return undefined if existing username was passed in", () => {
+    return fetchUserByUsername("asdf").then((res) => {
+      expect(res).toBe(undefined);
+    });
   });
 });
