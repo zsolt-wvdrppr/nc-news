@@ -3,6 +3,7 @@ const seed = require("../db/seeds/seed.js");
 const data = require("../db/data/test-data/index.js");
 const request = require("supertest");
 const app = require("../app.js");
+const { createCommentForArticle } = require("../models/articles.model.js");
 
 beforeEach(() => {
   return seed(data);
@@ -115,5 +116,17 @@ describe("GET: /api/articles/:article_id/comments", () => {
           expect(comment.created_at).toBeString();
         });
       });
+  });
+});
+
+describe("Model testing: createCommentForArticle()", () => {
+  test("The model return an array", () => {
+    return createCommentForArticle(
+      1,
+      "butter_bridge",
+      "it's a test comment",
+    ).then((res) => {
+      expect(res).toBeArray();
+    });
   });
 });
