@@ -3,12 +3,16 @@ const {
   getAllArticles,
   getArticleById,
   getCommentsByArticleId,
+  addCommentToArticle,
 } = require("../controllers/articles.controller");
 
 const articlesRouter = app.Router();
 
 articlesRouter.get("/", getAllArticles);
 articlesRouter.get("/:articleId", getArticleById);
-articlesRouter.get("/:articleId/comments", getCommentsByArticleId);
+articlesRouter
+  .route("/:articleId/comments")
+  .get(getCommentsByArticleId)
+  .post(addCommentToArticle);
 
 module.exports = articlesRouter;
