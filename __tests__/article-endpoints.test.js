@@ -184,7 +184,6 @@ describe("POST /api/articles/:article_id/comments", () => {
           [comment.comment_id],
         );
         const commentObj = queryResult.rows[0];
-        console.log("typeof created_at", typeof commentObj.created_at);
         expect(queryResult.rows).toBeArray();
         expect(commentObj).toBeObject();
         expect(commentObj.comment_id).toBeNumber();
@@ -233,7 +232,6 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect("Content-Type", /application\/json/)
       .expect(400)
       .then(({ body }) => {
-        console.log("res+", body);
         expect(body.message).toBe("Comment is required!");
       });
   });
@@ -255,7 +253,6 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect("Content-Type", /application\/json/)
       .expect(400)
       .then(({ body }) => {
-        console.log("res+", body);
         expect(body.message).toBe(
           "Comment is too long. It must be less than 500 characters!",
         );
@@ -265,7 +262,7 @@ describe("POST /api/articles/:article_id/comments", () => {
 
 describe("Model testing: updateVotesOfArticle()", () => {
   test("Model should return updated article object with props: article_id, title, topic, author, body, created_at, votes, article_img_url", () => {
-    updateVotesOfArticle(1, { inc_votes: 1 }).then((article) => {
+    updateVotesOfArticle(1, { inc_votes: -1 }).then((article) => {
       expect(article).toBeObject();
       expect(article.article_id).toBe(1);
       expect(article.title).toBeString();
@@ -273,7 +270,7 @@ describe("Model testing: updateVotesOfArticle()", () => {
       expect(article.author).toBeString();
       expect(article.body).toBeString();
       expect(typeof article.created_at).toBe("object");
-      expect(article.votes).toBe(101);
+      expect(article.votes).toBe(99);
       expect(article.article_img_url).toBeString();
     });
   });
@@ -287,7 +284,122 @@ describe("Model testing: updateVotesOfArticle()", () => {
       "SELECT votes FROM articles WHERE article_id = $1",
       [1],
     );
-    console.log(votesBefore.rows[0], votesAfter.rows[0]);
     expect(votesBefore.rows[0]).not.toEqual(votesAfter.rows[0]);
+  });
+});
+
+describe.skip("PATCH /api/articles/:article_id", () => {
+  test("201: Responds with an object", () => {
+    const newVote = 100;
+    return request(app)
+      .post("/api/articles/1")
+      .send({
+        inc_votes: newVote,
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(201)
+      .then((res) => {
+        expect(res).toBeObject();
+      });
+  });
+  test("201: The returned object should have props: comment_id, article_id, body, votes, author, created_at", () => {
+    const newVote = 100;
+    return request(app)
+      .post("/api/articles/1")
+      .send({
+        inc_votes: newVote,
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(201)
+      .then(({ body: { comment } }) => {
+        expect(comment.comment_id).toBeNumber();
+        expect(comment.article_id).toBe(1);
+        expect(comment.votes).toBeNumber();
+        expect(comment.author).toBeString();
+        expect(comment.created_at).toBeString();
+      });
+  });
+  test("201: The added comment should exist in the database", () => {
+    const newVote = 100;
+    return request(app)
+      .post("/api/articles/1")
+      .send({
+        inc_votes: newVote,
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(201)
+      .then(async ({ body: { comment } }) => {
+        const queryResult = await db.query(
+          `SELECT * FROM comments WHERE comment_id = $1`,
+          [comment.comment_id],
+        );
+        const commentObj = queryResult.rows[0];
+        expect(queryResult.rows).toBeArray();
+        expect(commentObj).toBeObject();
+        expect(commentObj.comment_id).toBeNumber();
+        expect(commentObj.article_id).toBe(1);
+        expect(commentObj.votes).toBeNumber();
+        expect(commentObj.author).toBeString();
+        expect(typeof commentObj.created_at).toBe("object");
+      });
+  });
+  test("404: If the name does not exist in the database, should return Not Found error", () => {
+    const newVote = 100;
+    return request(app)
+      .post("/api/articles/1")
+      .send({
+        inc_votes: newVote,
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("User not found!");
+      });
+  });
+  test("400: If the article ID is invalid format, should return Invalid Type error", () => {
+    const newVote = 100;
+    return request(app)
+      .post("/api/articles/asdf")
+      .send({
+        inc_votes: newVote,
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Invalid article id!");
+      });
+  });
+  test("500: If the comment body has incorrect key", () => {
+    const newVote = 100;
+    return request(app)
+      .post("/api/articles/1")
+      .send({
+        inc_votas: newVote,
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Invalid key in qurey!");
+      });
+  });
+  test("500: If the comment body's inc_votes' value's format is incorrect should return Bad request error", () => {
+    const newVote = "asdf";
+    return request(app)
+      .post("/api/articles/1")
+      .send({
+        inc_votes: newVote,
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Increment amount must be a number!");
+      });
   });
 });
