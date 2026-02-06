@@ -7,7 +7,6 @@ const {
   createCommentForArticle,
   updateVotesOfArticle,
 } = require("../models/articles.model.js");
-const NotFoundError = require("../errors/NotFoundError.js");
 
 beforeEach(() => {
   return seed(data);
@@ -218,7 +217,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect("Content-Type", /application\/json/)
       .expect(400)
       .then(({ body }) => {
-        expect(body.message).toBe("Invalid article id!");
+        expect(body.message).toBe("Incorrect article id format!");
       });
   });
   test("500: If the comment body has 0 character should return Bad request error", () => {
@@ -371,7 +370,7 @@ describe.skip("PATCH /api/articles/:article_id", () => {
       .expect("Content-Type", /application\/json/)
       .expect(400)
       .then(({ body }) => {
-        expect(body.message).toBe("Invalid article id!");
+        expect(body.message).toBe("Incorrect article id format!");
       });
   });
   test("500: If the comment body has incorrect key", () => {
@@ -385,7 +384,7 @@ describe.skip("PATCH /api/articles/:article_id", () => {
       .expect("Content-Type", /application\/json/)
       .expect(400)
       .then(({ body }) => {
-        expect(body.message).toBe("Invalid key in qurey!");
+        expect(body.message).toBe("Invalid key!");
       });
   });
   test("500: If the comment body's inc_votes' value's format is incorrect should return Bad request error", () => {

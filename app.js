@@ -19,7 +19,7 @@ app.all("*path", (req, res) => {
 
 app.use((err, req, res, next) => {
   if (err) {
-    res.status(err.status).send({
+    res.status(err.status || 500).send({
       message: err.message,
     });
   } else {
