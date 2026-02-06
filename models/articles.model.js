@@ -29,3 +29,11 @@ exports.createCommentForArticle = async (article_id, username, body) => {
   );
   return result.rows[0];
 };
+
+exports.updateVotesOfArticle = async (article_id, body) => {
+  const result = await db.query(
+    `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`,
+    [body.inc_votes, article_id],
+  );
+  return result.rows[0];
+};
