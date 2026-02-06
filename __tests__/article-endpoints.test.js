@@ -4,6 +4,7 @@ const data = require("../db/data/test-data/index.js");
 const request = require("supertest");
 const app = require("../app.js");
 const { createCommentForArticle } = require("../models/articles.model.js");
+const NotFoundError = require("../errors/NotFoundError.js");
 
 beforeEach(() => {
   return seed(data);
@@ -126,7 +127,135 @@ describe("Model testing: createCommentForArticle()", () => {
       "butter_bridge",
       "it's a test comment",
     ).then((res) => {
-      expect(res).toBeArray();
+      expect(res).toBeObject();
     });
+  });
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: Responds with an object", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        username: "butter_bridge",
+        body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(201)
+      .then((res) => {
+        expect(res).toBeObject();
+      });
+  });
+  test("201: The returned object should have props: comment_id, article_id, body, votes, author, created_at", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        username: "butter_bridge",
+        body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(201)
+      .then(({ body: { comment } }) => {
+        expect(comment.comment_id).toBeNumber();
+        expect(comment.article_id).toBe(1);
+        expect(comment.votes).toBeNumber();
+        expect(comment.author).toBeString();
+        expect(comment.created_at).toBeString();
+      });
+  });
+  test("201: The added comment should exist in the database", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        username: "butter_bridge",
+        body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(201)
+      .then(async ({ body: { comment } }) => {
+        const queryResult = await db.query(
+          `SELECT * FROM comments WHERE comment_id = $1`,
+          [comment.comment_id],
+        );
+        const commentObj = queryResult.rows[0];
+        console.log("typeof created_at", typeof commentObj.created_at);
+        expect(queryResult.rows).toBeArray();
+        expect(commentObj).toBeObject();
+        expect(commentObj.comment_id).toBeNumber();
+        expect(commentObj.article_id).toBe(1);
+        expect(commentObj.votes).toBeNumber();
+        expect(commentObj.author).toBeString();
+        expect(typeof commentObj.created_at).toBe("object");
+      });
+  });
+  test("404: If the name does not exist in the database, should return Not Found error", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        username: "non_existing_user",
+        body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("User not found!");
+      });
+  });
+  test("400: If the article ID is invalid format, should return Invalid Type error", () => {
+    return request(app)
+      .post("/api/articles/invalidID/comments")
+      .send({
+        username: "non_existing_user",
+        body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Invalid article id!");
+      });
+  });
+  test("500: If the comment body has 0 character should return Bad request error", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        username: "butter_bridge",
+        body: "",
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(400)
+      .then(({ body }) => {
+        console.log("res+", body);
+        expect(body.message).toBe("Comment is required!");
+      });
+  });
+  test("500: If the comment body has more than 500 character should return Bad request error", () => {
+    const genContent = (len) => {
+      let content = "";
+      for (let i = 0; i < len; i++) {
+        content += "a";
+      }
+      return content;
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        username: "butter_bridge",
+        body: genContent(501),
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(400)
+      .then(({ body }) => {
+        console.log("res+", body);
+        expect(body.message).toBe(
+          "Comment is too long. It must be less than 500 characters!",
+        );
+      });
   });
 });
