@@ -27,5 +27,5 @@ exports.createCommentForArticle = async (article_id, username, body) => {
     VALUES ($1, $2, $3) RETURNING *`,
     [article_id, body, username],
   );
-  return result.rows;
+  return result.rows[0];
 };
