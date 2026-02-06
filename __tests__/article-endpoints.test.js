@@ -3,7 +3,10 @@ const seed = require("../db/seeds/seed.js");
 const data = require("../db/data/test-data/index.js");
 const request = require("supertest");
 const app = require("../app.js");
-const { createCommentForArticle } = require("../models/articles.model.js");
+const {
+  createCommentForArticle,
+  updateVotesOfArticle,
+} = require("../models/articles.model.js");
 const NotFoundError = require("../errors/NotFoundError.js");
 
 beforeEach(() => {
@@ -257,5 +260,34 @@ describe("POST /api/articles/:article_id/comments", () => {
           "Comment is too long. It must be less than 500 characters!",
         );
       });
+  });
+});
+
+describe("Model testing: updateVotesOfArticle()", () => {
+  test("Model should return updated article object with props: article_id, title, topic, author, body, created_at, votes, article_img_url", () => {
+    updateVotesOfArticle(1, { inc_votes: 1 }).then((article) => {
+      expect(article).toBeObject();
+      expect(article.article_id).toBe(1);
+      expect(article.title).toBeString();
+      expect(article.topic).toBeString();
+      expect(article.author).toBeString();
+      expect(article.body).toBeString();
+      expect(typeof article.created_at).toBe("object");
+      expect(article.votes).toBe(101);
+      expect(article.article_img_url).toBeString();
+    });
+  });
+  test("Article should be updated in the database", async () => {
+    const votesBefore = await db.query(
+      "SELECT votes FROM articles WHERE article_id = $1",
+      [1],
+    );
+    await updateVotesOfArticle(1, { inc_votes: 10 });
+    const votesAfter = await db.query(
+      "SELECT votes FROM articles WHERE article_id = $1",
+      [1],
+    );
+    console.log(votesBefore.rows[0], votesAfter.rows[0]);
+    expect(votesBefore.rows[0]).not.toEqual(votesAfter.rows[0]);
   });
 });
