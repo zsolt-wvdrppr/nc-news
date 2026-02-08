@@ -1,10 +1,22 @@
 const db = require("../db/connection");
 const format = require("pg-format");
 
-exports.fetchAllArticles = async (sort_by = "created_at", order = "desc") => {
-  const result = await db.query(
-    format("SELECT * FROM articles ORDER BY %s %s", sort_by, order),
-  );
+exports.fetchAllArticles = async (
+  sort_by = "created_at",
+  order = "desc",
+  topic = null,
+) => {
+  const query =
+    topic ?
+      format(
+        "SELECT * FROM articles WHERE topic = %L ORDER BY %s %s",
+        topic,
+        sort_by,
+        order,
+      )
+    : format("SELECT * FROM articles ORDER BY %s %s", sort_by, order);
+  const result = await db.query(format(query, sort_by, order));
+
   return result.rows;
 };
 

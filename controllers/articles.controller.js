@@ -7,9 +7,19 @@ const {
   incVotesByArticleId: incVotesByArticleIdService,
 } = require("../services/articles.service");
 
-exports.getAllArticles = async (req, res) => {
-  const articles = await getAllArticlesService();
-  res.status(200).send({ articles });
+exports.getAllArticles = async (req, res, next) => {
+  const {
+    sortBy = "created_at",
+    order = "desc",
+    topic = undefined,
+  } = req.query;
+
+  try {
+    const articles = await getAllArticlesService(sortBy, order, topic);
+    res.status(200).send({ articles });
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.getArticleById = async (req, res, next) => {
