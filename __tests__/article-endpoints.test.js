@@ -7,6 +7,7 @@ const {
   createCommentForArticle,
   updateVotesOfArticle,
 } = require("../models/articles.model.js");
+const { deleteCommentById } = require("../models/comments.model.js");
 
 beforeEach(() => {
   return seed(data);
@@ -123,7 +124,7 @@ describe("GET: /api/articles/:article_id/comments", () => {
 });
 
 describe("Model testing: createCommentForArticle()", () => {
-  test("The model return an array", () => {
+  test("The method returns an array", () => {
     return createCommentForArticle(
       1,
       "butter_bridge",
@@ -260,7 +261,7 @@ describe("POST /api/articles/:article_id/comments", () => {
 });
 
 describe("Model testing: updateVotesOfArticle()", () => {
-  test("Model should return updated article object with props: article_id, title, topic, author, body, created_at, votes, article_img_url", () => {
+  test("Method should return updated article object with props: article_id, title, topic, author, body, created_at, votes, article_img_url", () => {
     updateVotesOfArticle(1, { inc_votes: -1 }).then((article) => {
       expect(article).toBeObject();
       expect(article.article_id).toBe(1);
@@ -395,5 +396,18 @@ describe("PATCH /api/articles/:article_id", () => {
       .then(({ body }) => {
         expect(body.message).toBe("Increment amount must be a number!");
       });
+  });
+});
+
+describe("Model testing: deletCommentById()", () => {
+  test("Method should return deleted comment object", async () => {
+    const comment_id = 1;
+    const result = await deleteCommentById(comment_id);
+    expect(result.comment_id).toBe(1);
+    expect(result.article_id).toBe(9);
+    expect(result.body).toBeString();
+    expect(result.votes).toBeNumber();
+    expect(result.author).toBeString();
+    expect(typeof result.created_at).toBe("object");
   });
 });
