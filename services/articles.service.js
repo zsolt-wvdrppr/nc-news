@@ -11,7 +11,7 @@ const {
 const {
   validateArticleId,
   validateUsername,
-  validateArticleIdFormat,
+  validateIdFormat,
 } = require("./utils");
 
 exports.getAllArticles = () => {
@@ -58,7 +58,7 @@ exports.addCommentToArticle = async (article_id, username, body) => {
 };
 
 exports.incVotesByArticleId = async (article_id, body) => {
-  validateArticleIdFormat(article_id);
+  validateIdFormat(article_id, "article");
   if (!Object.hasOwn(body, "inc_votes"))
     throw new BadRequestError("Invalid key!");
   if (!parseInt(body.inc_votes))

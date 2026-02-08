@@ -2,16 +2,16 @@ const InvalidTypeError = require("../errors/InvalidTypeError");
 const NotFoundError = require("../errors/NotFoundError");
 const { fetchArticleById } = require("../models/articles.model");
 const { fetchUserByUsername } = require("../models/users.model");
-const { getArticleById } = require("./articles.service");
 
 exports.validateArticleId = async (article_id) => {
-  this.validateArticleIdFormat(article_id);
+  this.validateIdFormat(article_id, "article");
   const result = await fetchArticleById(article_id);
   if (result === undefined) throw new NotFoundError("Article not found");
 };
 
-exports.validateArticleIdFormat = (id) => {
-  if (!parseInt(id)) throw new InvalidTypeError("Incorrect article id format!");
+exports.validateIdFormat = (id, id_type) => {
+  if (!parseInt(id))
+    throw new InvalidTypeError(`Incorrect ${id_type} id format!`);
 };
 
 exports.validateUsername = async (username) => {
