@@ -22,7 +22,23 @@ exports.fetchAllArticles = async (
 
 exports.fetchArticleById = async (article_id) => {
   const result = await db.query(
-    "SELECT * FROM articles WHERE article_id = $1",
+    `SELECT
+    COUNT(comment_id) AS comment_count,
+    articles.article_id,
+    articles.title,
+    articles.topic,
+    articles.author,
+    articles.body,
+    articles.created_at,
+    articles.votes,
+    articles.article_img_url
+FROM
+    articles
+    LEFT JOIN comments ON comments.article_id = articles.article_id
+WHERE
+    articles.article_id = $1
+GROUP BY
+    articles.article_id;`,
     [article_id],
   );
   return result.rows[0];

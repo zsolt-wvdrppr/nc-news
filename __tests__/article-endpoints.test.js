@@ -485,3 +485,15 @@ describe("GET /api/articles (topic query)", () => {
     return request(app).get(`/api/articles?topic=${topic}`).expect(404);
   });
 });
+
+describe("GET /api/articles/:article_id (comment_count)", () => {
+  test("200: Returned article object should contain comment_count prop", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(typeof parseInt(article.comment_count)).toBe("number");
+        expect(parseInt(article.comment_count)).toBe(11);
+      });
+  });
+});
