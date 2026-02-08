@@ -9,9 +9,10 @@ exports.validateArticleId = async (article_id) => {
   if (result === undefined) throw new NotFoundError("Article not found");
 };
 
-exports.validateIdFormat = (id, id_type) => {
+exports.validateIdFormat = (id, id_type = "") => {
+  if (id_type) id_type += " "; // Add space character after id type if availabe
   if (!parseInt(id))
-    throw new InvalidTypeError(`Incorrect ${id_type} id format!`);
+    throw new InvalidTypeError(`Incorrect ${id_type}id format!`);
 };
 
 exports.validateUsername = async (username) => {
