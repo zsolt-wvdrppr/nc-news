@@ -397,3 +397,21 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 });
+
+describe("GET /api/articles (sorting queries)", () => {
+  test("Should order results by created_at in descending order by default", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        const createdAtColValsArr = [];
+        articles.forEach((article) => {
+          createdAtColValsArr.push(article.created_at);
+        });
+        const sortedCreatedAtColsValsArr = [...createdAtColValsArr].sort(
+          (a, b) => b - a,
+        );
+        expect(createdAtColValsArr).toEqual(sortedCreatedAtColsValsArr);
+      });
+  });
+});
