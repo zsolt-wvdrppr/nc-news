@@ -1,10 +1,10 @@
 const BadRequestError = require("../errors/BadRequestError");
-const { createCommentForArticle } = require("../models/articles.model");
 const {
   getAllArticles: getAllArticlesService,
   getArticleById: getARticleByIdService,
   getCommentsByArticleId: getCommentsByArticleIdService,
   addCommentToArticle: addCommentToArticleService,
+  incVotesByArticleId: incVotesByArticleIdService,
 } = require("../services/articles.service");
 
 exports.getAllArticles = async (req, res) => {
@@ -42,6 +42,19 @@ exports.addCommentToArticle = async (req, res, next) => {
   try {
     const comment = await addCommentToArticleService(articleId, username, body);
     res.status(201).send({ comment });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.incVotesByArticleId = async (req, res, next) => {
+  const { articleId } = req.params;
+  const body = req.body;
+  if (body === undefined) throw new BadRequestError("Missing request body!");
+
+  try {
+    const article = await incVotesByArticleIdService(articleId, body);
+    res.status(201).send({ article });
   } catch (err) {
     next(err);
   }

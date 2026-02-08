@@ -6,6 +6,7 @@ const {
   fetchArticleById,
   fetchCommentsByArticleId,
   createCommentForArticle,
+  updateVotesOfArticle,
 } = require("../models/articles.model");
 const {
   validateArticleId,
@@ -58,8 +59,9 @@ exports.addCommentToArticle = async (article_id, username, body) => {
 
 exports.incVotesByArticleId = async (article_id, body) => {
   validateArticleIdFormat(article_id);
-  if ((!Object.keyOwn(body), "inc_votes"))
+  if (!Object.hasOwn(body, "inc_votes"))
     throw new BadRequestError("Invalid key!");
   if (!parseInt(body.inc_votes))
     throw new BadRequestError("Increment amount must be a number!");
+  return await updateVotesOfArticle(article_id, body);
 };
