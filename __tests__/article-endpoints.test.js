@@ -323,12 +323,17 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(article.article_img_url).toBeString();
       });
   });
-  test("201: The added article should exist in the database", () => {
-    const newVote = 100;
+  test("201: The article's votes should be updated in the database", async () => {
+    const queryResultBefore = await db.query(
+      `SELECT * FROM articles WHERE article_id = $1`,
+      [1],
+    );
+    const votesBeforeUpdate = queryResultBefore.rows[0].votes;
+    const votesToIncrementBy = 100;
     return request(app)
       .patch("/api/articles/1")
       .send({
-        inc_votes: newVote,
+        inc_votes: votesToIncrementBy,
       })
       .set("Accept", "application/json")
       .expect("Content-Type", /application\/json/)
@@ -345,7 +350,7 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(articleInDb.author).toBeString();
         expect(articleInDb.body).toBeString();
         expect(typeof articleInDb.created_at).toBe("object");
-        expect(articleInDb.votes).toBeNumber();
+        expect(articleInDb.votes).toBe(votesBeforeUpdate + votesToIncrementBy);
         expect(articleInDb.article_img_url).toBeString();
       });
   });
