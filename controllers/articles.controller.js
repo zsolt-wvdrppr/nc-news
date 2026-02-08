@@ -8,7 +8,8 @@ const {
 } = require("../services/articles.service");
 
 exports.getAllArticles = async (req, res) => {
-  const articles = await getAllArticlesService();
+  const { sortBy = "created_at", order = "desc" } = req.query;
+  const articles = await getAllArticlesService(sortBy, order);
   res.status(200).send({ articles });
 };
 

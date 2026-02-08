@@ -399,19 +399,60 @@ describe("PATCH /api/articles/:article_id", () => {
 });
 
 describe("GET /api/articles (sorting queries)", () => {
-  test("Should order results by created_at in descending order by default", () => {
+  test("200: Should order results by created_at in descending order by default", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
       .then(({ body: { articles } }) => {
-        const createdAtColValsArr = [];
+        const unsortedColVals = [];
         articles.forEach((article) => {
-          createdAtColValsArr.push(article.created_at);
+          unsortedColVals.push(article.created_at);
         });
-        const sortedCreatedAtColsValsArr = [...createdAtColValsArr].sort(
-          (a, b) => b - a,
-        );
-        expect(createdAtColValsArr).toEqual(sortedCreatedAtColsValsArr);
+        const sortedColVals = [...unsortedColVals].sort((a, b) => b - a);
+        expect(unsortedColVals).toEqual(sortedColVals);
       });
+  });
+  test("200: Should order results by created_at in ascending order", () => {
+    const order = "asc";
+    return request(app)
+      .get(`/api/articles?order=${order}`) // Column should use default value
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        const unsortedColVals = [];
+        articles.forEach((article) => {
+          unsortedColVals.push(article.createdAt);
+        });
+        const sortedColVals = [...unsortedColVals].sort((a, b) => a - b);
+        expect(unsortedColVals).toEqual(sortedColVals);
+      });
+  });
+  test("200: Should order results by votes in ascending order", () => {
+    const column = "votes";
+    const order = "asc";
+    return request(app)
+      .get(`/api/articles?order=${order}&sortBy=${column}`)
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        const unsortedColVals = [];
+        articles.forEach((article) => {
+          unsortedColVals.push(article[column]);
+        });
+        const sortedColVals = [...unsortedColVals].sort((a, b) => a - b);
+        expect(unsortedColVals).toEqual(sortedColVals);
+      });
+  });
+  test("400: Should return Bad Request if column does not exist", () => {
+    const column = "apples";
+    const order = "asc";
+    return request(app)
+      .get(`/api/articles?order=${order}&sortBy=${column}`)
+      .expect(400);
+  });
+  test("400: Should return Bad Request if order keyword is wrong", () => {
+    const column = "title";
+    const order = "asdf";
+    return request(app)
+      .get(`/api/articles?order=${order}&sortBy=${column}`)
+      .expect(400);
   });
 });

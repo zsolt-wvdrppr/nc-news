@@ -2,9 +2,11 @@ const db = require("../db/connection");
 const format = require("pg-format");
 
 exports.fetchAllArticles = async (sort_by = "created_at", order = "desc") => {
+  console.log("fetchAllArticles triggered");
   const result = await db.query(
     format("SELECT * FROM articles ORDER BY %s %s", sort_by, order),
   );
+  console.log("resultmod+", result);
   return result.rows;
 };
 

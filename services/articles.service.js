@@ -12,10 +12,15 @@ const {
   validateArticleId,
   validateUsername,
   validateIdFormat,
+  validateArticleSortByColumnName,
+  validateOrder,
 } = require("./utils");
 
-exports.getAllArticles = () => {
-  return fetchAllArticles();
+exports.getAllArticles = async (sort_by = "created_at", order = "desc") => {
+  validateArticleSortByColumnName(sort_by);
+  validateOrder(order);
+  const result = await fetchAllArticles(sort_by, order);
+  return result;
 };
 
 exports.getArticleById = async (article_id) => {
