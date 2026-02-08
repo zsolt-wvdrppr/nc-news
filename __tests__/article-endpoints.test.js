@@ -400,6 +400,7 @@ describe("PATCH /api/articles/:article_id", () => {
 
 describe("GET /api/articles (sorting queries)", () => {
   test("200: Should order results by created_at in descending order by default", () => {
+  test("200: Should order results by created_at in descending order by default", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
