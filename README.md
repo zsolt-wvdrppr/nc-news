@@ -55,6 +55,10 @@ Run `npm run seed-dev` in the terminal. This will seed the nc_news database with
 
 Run `npm run start`. It will start the server on port 8000 (or else if set otherwise in .env file)
 
+## ⛓️Entity-Relationship Diagram
+
+![**Entity-Relationship Diagram**](https://github.com/zsolt-wvdrppr/nc-news/blob/main/img/ncnews-ERD.png?raw=true)
+
 ## 👤About the author
 
 Junior Developer transitioning from digital marketing and technical operations, with a passion for solving practical problems. Experienced in automating workflows, integrating business requirements into technical solutions, and optimising platforms. Skilled in JavaScript, HTML, CSS, with a working knowledge of C# and Python, and hands-on experience building reliable, efficient, and user-focused applications. Driven by curiosity, persistence, and a problem-solving mindset to deliver practical, high-quality software solutions.
