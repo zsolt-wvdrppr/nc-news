@@ -1,0 +1,98 @@
+{
+  "sectionSubTitles": [
+    { "description": "Description" },
+    { "query-params": "Query Parameters" },
+    { "req-body": "Request Body" },
+    { "res-body": "Response Body" },
+    { "status-codes": "Status Codes & Error Handling" }
+  ],
+  "sections": [
+    {
+      "anchor": "get-all-articles",
+      "method": "GET",
+      "endpoint": "/api/articles",
+      "description": "List all available articles",
+      "queryParams": [
+        {
+          "example": "sortBy=[column]",
+          "description": "Sort articles by column"
+        },
+        { "example": "order=[asc/desc]", "description": "Sorting order" },
+        { "example": "topic=[slag]", "description": "Filter articles by topic" }
+      ],
+      "reqBody": "-",
+      "resBody": "{ \"articles\":[...] }",
+      "statusCodes": [
+        {
+          "type": "success",
+          "code": "200",
+          "title": "OK",
+          "description": "Responds with an array on the key of articles"
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Bad Request Error",
+          "description": "Sort by column does not exist or not allowed (eg. body)"
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Bad Request Error",
+          "description": "Incorrect \"order\" key. Must be asc or dec"
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found Error",
+          "description": "Filtered topic does not exist"
+        }
+      ]
+    },
+    {
+      "anchor": "get-article-by-id",
+      "method": "GET",
+      "endpoint": "/api/articles",
+      "description": "List all available articles",
+
+      "reqBody": "-",
+      "resBody": "{ \"articles\":[...] }",
+      "statusCodes": [
+        {
+          "type": "success",
+          "code": "200",
+          "title": "OK",
+          "description": "Articles retrieved succesfully"
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found",
+          "description": "Articles retrieved succesfully"
+        }
+      ]
+    },
+    {
+      "anchor": "get-comments-of-article",
+      "method": "GET",
+      "endpoint": "/api/articles/:article_id/comments",
+      "description": "List all comments of an article",
+      "reqBody": "-",
+      "resBody": "{ \"comments\":[...] }",
+      "statusCodes": [
+        {
+          "type": "success",
+          "code": "200",
+          "title": "OK",
+          "description": "Responds with an array on the key of articles"
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found Error",
+          "description": "No comment found"
+        }
+      ]
+    }
+  ]
+}

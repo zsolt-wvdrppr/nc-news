@@ -8,71 +8,53 @@
   </head>
   <body>
     <header><h1>Zsolt's NC-NEWS API Documentation</h1></header>
+    <template id="endpoint-template">
+      <div>
+        <h2></h2>
+        <h3 class="description"></h3>
+        <p class="description"></p>
+        <h3 class="query-params"></h3>
+        <div class="query-params-container"></div>
+        <h3 class="req-body"></h3>
+        <p class="req-body"></p>
+        <h3 class="res-body"></h3>
+        <p class="res-body"></p>
+        <h3 class="status-codes"></h3>
+      </div>
+    </template>
+    <template id="query-params-template">
+      <div>
+        <p class="qp-example"></p>
+        <p class="qp-description"></p>
+      </div>
+    </template>
+    <template id="status-template">
+      <div>
+        <p class="status-code"></p>
+        <p class="status-title"></p>
+        <p class="status-description"></p>
+      </div>
+    </template>
+    <template id="not-available">
+      <div>
+        <p>Not Available</p>
+      </div>
+    </template>
+    <template id="nav-template">
+      <li>
+        <a>
+          <span class="part1"></span>
+          <span class="part2"></span>
+        </a>
+      </li>
+    </template>
     <nav>
-      <ul>
-        <li class="nav-option">
-          GET
-          <span>/api/articles</span>
-        </li>
-        <li class="nav-option">
-          GET
-          <span>/api/articles/:article_id</span>
-        </li>
-        <li class="nav-option">
-          GET
-          <span>/api/articles/:article_id/comments</span>
-        </li>
-        <li class="nav-option">
-          POST
-          <span>/api/articles/:article_id/comments</span>
-        </li>
-        <li class="nav-option">
-          PATCH
-          <span>/api/articles/:article_id</span>
-        </li>
-        <li class="nav-option">
-          DELETE
-          <span>/api/comments/:comment_id</span>
-        </li>
-        <li class="nav-option">
-          GET
-          <span>/api/topics</span>
-        </li>
-        <li class="nav-option">
-          GET
-          <span>/api/users</span>
-        </li>
-      </ul>
+      <ul></ul>
     </nav>
     <main>
-      <section>
-        <h2>GET <span>/api/articles/:article_id</span></h2>
-      </section>
-      <section>
-        <h2>GET <span>/api/articles/:article_id</span></h2>
-      </section>
-      <section>
-        <h2>GET <span>/api/articles/:article_id</span></h2>
-      </section>
-      <section>
-        <h2>GET <span>/api/articles/:article_id/comments</span></h2>
-      </section>
-      <section>
-        <h2>POST <span> /api/articles/:article_id/comments</span></h2>
-      </section>
-      <section>
-        <h2>PATCH <span>/api/articles/:article_id</span></h2>
-      </section>
-      <section>
-        <h2>DELETE <span>/api/comments/:comment_id</span></h2>
-      </section>
-      <section>
-        <h2>GET <span>/api/topics</span></h2>
-      </section>
-      <section>
-        <h2>GET <span>/api/users</span></h2>
-      </section>
+      <div id="endpoints-container"></div>
     </main>
     <footer><p>Copyright 2026</p></footer>
+    <script src="script.js"></script>
   </body>
 </html>
