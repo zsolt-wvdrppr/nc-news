@@ -30,16 +30,8 @@ exports.getAllArticles = async (
 };
 
 exports.getArticleById = async (article_id) => {
-  if (!parseInt(article_id))
-    throw new InvalidTypeError("Incorrect article id format!");
-
-  const result = await fetchArticleById(article_id);
-
-  if (result === undefined) {
-    throw new NotFoundError("Article not found");
-  } else {
-    return result;
-  }
+  await validateArticleId(article_id);
+  return await fetchArticleById(article_id);
 };
 
 exports.getCommentsByArticleId = async (article_id) => {
