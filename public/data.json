@@ -11,7 +11,7 @@
       "anchor": "get-all-articles",
       "method": "GET",
       "endpoint": "/api/articles",
-      "description": "List all available articles",
+      "description": "This endpoint lists all available articles from the database.",
       "queryParams": [
         {
           "example": "sortBy=[column]",
@@ -20,55 +20,87 @@
         { "example": "order=[asc/desc]", "description": "Sorting order" },
         { "example": "topic=[slag]", "description": "Filter articles by topic" }
       ],
-      "reqBody": "-",
-      "resBody": "{ \"articles\":[...] }",
+      "reqBody": "N/A",
+      "resBody": {
+        "articles": [
+          {
+            "comment_count": "[number as a string]",
+            "article_id": "[number]",
+            "title": "[string]",
+            "topic": "[string]",
+            "author": "[string]",
+            "body": "[string]",
+            "created_at": "[string]",
+            "votes": "[number]",
+            "article_img_url": "[string]"
+          }
+        ]
+      },
       "statusCodes": [
         {
           "type": "success",
           "code": "200",
           "title": "OK",
-          "description": "Responds with an array on the key of articles"
+          "description": "Responds with an array on the key of articles."
         },
         {
           "type": "error",
           "code": "400",
           "title": "Bad Request Error",
-          "description": "Sort by column does not exist or not allowed (eg. body)"
+          "description": "Sort by column does not exist or not allowed (eg. body)."
         },
         {
           "type": "error",
           "code": "400",
           "title": "Bad Request Error",
-          "description": "Incorrect \"order\" key. Must be asc or dec"
+          "description": "Incorrect \"order\" key. Must be asc or dec."
         },
         {
           "type": "error",
           "code": "404",
           "title": "Not Found Error",
-          "description": "Filtered topic does not exist"
+          "description": "Filtered topic does not exist."
         }
       ]
     },
     {
       "anchor": "get-article-by-id",
       "method": "GET",
-      "endpoint": "/api/articles",
-      "description": "List all available articles",
+      "endpoint": "/api/articles/:article_id",
+      "description": "This endpoint lists a specified article from the database.",
 
-      "reqBody": "-",
-      "resBody": "{ \"articles\":[...] }",
+      "reqBody": "N/A",
+      "resBody": {
+        "article": {
+          "comment_count": "[number as a string]",
+          "article_id": "[number]",
+          "title": "[string]",
+          "topic": "[string]",
+          "author": "[string]",
+          "body": "[string]",
+          "created_at": "[string]",
+          "votes": "[number]",
+          "article_img_url": "[string]"
+        }
+      },
       "statusCodes": [
         {
           "type": "success",
           "code": "200",
           "title": "OK",
-          "description": "Articles retrieved succesfully"
+          "description": "Article fetched succesfully"
         },
         {
           "type": "error",
           "code": "404",
           "title": "Not Found",
-          "description": "Articles retrieved succesfully"
+          "description": "Article not found under the specified ID."
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Invalid Type Error",
+          "description": "Incorrect article id format. Must be a number."
         }
       ]
     },
@@ -76,21 +108,225 @@
       "anchor": "get-comments-of-article",
       "method": "GET",
       "endpoint": "/api/articles/:article_id/comments",
-      "description": "List all comments of an article",
-      "reqBody": "-",
-      "resBody": "{ \"comments\":[...] }",
+      "description": "This endpoint lists all comments of a specified article from the database.",
+      "reqBody": "N/A",
+      "resBody": {
+        "comments": [
+          {
+            "comment_id": "[number]",
+            "article_id": "[number]",
+            "body": "[string]",
+            "votes": "[number]",
+            "author": "[string]",
+            "created_at": "[string]"
+          }
+        ]
+      },
       "statusCodes": [
         {
           "type": "success",
           "code": "200",
           "title": "OK",
-          "description": "Responds with an array on the key of articles"
+          "description": "Responds with an array on the key of articles."
         },
         {
           "type": "error",
           "code": "404",
           "title": "Not Found Error",
-          "description": "No comment found"
+          "description": "Article not found under the specified ID."
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found Error",
+          "description": "No comments found at the specified article."
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Invalid Type Error",
+          "description": "Incorrect article id format. Must be a number."
+        }
+      ]
+    },
+    {
+      "anchor": "post-comment-to-article",
+      "method": "POST",
+      "endpoint": "/api/articles/:article_id/comments",
+      "description": "This endpoint posts a new comment to a specified article, and returns the posted comment object in the response body.",
+      "reqBody": { "username": "[string]", "body": "[string max-length:500]" },
+      "resBody": {
+        "comment_id": "[number]",
+        "article_id": "[number]",
+        "body": "[string]",
+        "votes": "[number]",
+        "author": "[string]",
+        "created_at": "[string]"
+      },
+      "statusCodes": [
+        {
+          "type": "success",
+          "code": "201",
+          "title": "OK",
+          "description": "Responds with an object on the key of comment."
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found Error",
+          "description": "Article not found!"
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found Error",
+          "description": "Username does not exist!"
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Invalid Type Error",
+          "description": "Incorrect article id format!"
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Bad Request Error",
+          "description": "Comment is required!"
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Bad Request Error",
+          "description": "Comment is too long. It must be less than 500 characters!"
+        }
+      ]
+    },
+    {
+      "anchor": "patch-article-vote",
+      "method": "PATCH",
+      "endpoint": "/api/articles/:article_id",
+      "description": "This endpoint updated the votes for a specified article, and returns the updated article object in the response body.",
+      "reqBody": { "inc_votes": ["integer"] },
+      "resBody": {
+        "article": {
+          "comment_count": "[number as a string]",
+          "article_id": "[number]",
+          "title": "[string]",
+          "topic": "[string]",
+          "author": "[string]",
+          "body": "[string]",
+          "created_at": "[string]",
+          "votes": "[number]",
+          "article_img_url": "[string]"
+        }
+      },
+      "statusCodes": [
+        {
+          "type": "success",
+          "code": "201",
+          "title": "OK",
+          "description": "Responds with an object on the key of article."
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found Error",
+          "description": "Article not found!"
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Invalid Type Error",
+          "description": "Incorrect article id format!"
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Invalid Key",
+          "description": "Invalid key in the response body. It must be 'inc_votes'."
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Invalid Value",
+          "description": "Invalid value in the response body. It must be a number either positive or negative."
+        }
+      ]
+    },
+    {
+      "anchor": "delete-comment",
+      "method": "DELETE",
+      "endpoint": "/api/comments/:comment_id",
+      "description": "This endpoint deletes a specified comment.",
+      "reqBody": "N/A",
+      "resBody": "N/A",
+      "statusCodes": [
+        {
+          "type": "success",
+          "code": "204",
+          "title": "OK",
+          "description": "Sucessful deletion of a comment."
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Invalid Type Error",
+          "description": "Incorrect comment ID format. Must be a number!"
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found Error",
+          "description": "Comment not found"
+        }
+      ]
+    },
+    {
+      "anchor": "get-all-topics",
+      "method": "GET",
+      "endpoint": "/api/topics",
+      "description": "This endpoint lists all available topics from the database.",
+      "reqBody": "N/A",
+      "resBody": {
+        "topics": [
+          {
+            "slug": "[string]",
+            "description": "[string]",
+            "img_url": "[string]"
+          }
+        ]
+      },
+      "statusCodes": [
+        {
+          "type": "success",
+          "code": "200",
+          "title": "OK",
+          "description": "Responds with an array on the key of topics."
+        }
+      ]
+    },
+    {
+      "anchor": "get-all-users",
+      "method": "GET",
+      "endpoint": "/api/users",
+      "description": "This endpoint lists all users from the database.",
+      "reqBody": "N/A",
+      "resBody": {
+        "topics": [
+          {
+            "username": "[string]",
+            "name": "[string]",
+            "avatar_url": "[string]"
+          }
+        ]
+      },
+      "statusCodes": [
+        {
+          "type": "success",
+          "code": "200",
+          "title": "OK",
+          "description": "Responds with an array on the key of users."
         }
       ]
     }
