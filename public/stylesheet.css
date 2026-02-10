@@ -1,27 +1,26 @@
 html {
   scroll-behavior: smooth;
 }
+
 body {
-  margin: 0px 0px 25px 250px;
   font-family: Arial, Helvetica, sans-serif;
   color: #023047;
   box-sizing: border-box;
 }
 
 footer {
-  padding-left: 25px;
   text-align: center;
 }
 
-h1 {
-  padding: 25px 5px 0px 25px;
-  margin: 0;
+header {
+  padding-top: 25px;
   color: #125768;
   text-align: center;
+  margin: 0px 5px 25px 275px;
 }
 
 h2 {
-  padding-top: 26px;
+  padding-top: 25px;
   border-top: solid 3px rgb(233, 231, 229);
   letter-spacing: 1.5px;
   color: #125768;
@@ -29,7 +28,9 @@ h2 {
 }
 
 main {
-  padding: 25px;
+  padding-top: 25px;
+  margin: 0px 0px 25px 275px;
+  box-sizing: border-box;
 }
 nav {
   height: 100dvh;
@@ -49,6 +50,8 @@ nav li {
   padding: 10px 10px;
   transition: all 1.5s;
   border-radius: 10px 0 0 10px;
+  border-left: solid 1px #219ebc;
+  margin-bottom: 3px;
 }
 nav li:hover {
   background-color: #219ebc;
@@ -158,8 +161,8 @@ pre {
     border-bottom: solid 5px #219ebc;
   }
 
-  main {
-    width: 100dvw;
-    box-sizing: border-box;
+  main,
+  header {
+    margin: 0 16px;
   }
 }
