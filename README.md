@@ -2,11 +2,17 @@
 
 NC News was a **Solo Project** I built during a Northcorders bootcamp. Now it has a completely functioning database and backend. The frontend is coming soon. All the endpoints are tested with Jest, and they also have effective error handling including user friendly error messages and appropriate status codes.
 
-I used JavaScript and Postgres SQL for database creation and seeding, Express JS for the backend server and HTML, CSS, JavaScript for the documentation (link below).
+I used JavaScript and Postgres SQL for database creation and seeding (see `/db folder`).
+
+Express JS for the backend server (see layers in the following folders: `/routes`, `/controllers`, `/services`, `/models`).
+
+Jest for testing (see `/__tests__` folder)
+
+HTML, CSS, JavaScript for the documentation (see `/public` folder or live link below).
 
 ## 🔌Available endpoints with query parameters
 
-Find the complete documentation about the available endpoints here: https://zsolts-news.onrender.com/api.
+🌐 Find the complete documentation about the available endpoints here: https://zsolts-news.onrender.com/api.
 
 The database is hosted on Supabase, and the Express JS server is on reder.com.
 
