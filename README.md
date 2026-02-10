@@ -1,6 +1,6 @@
 # NC-News Project
 
-NC News was a **Solo Project** I built during a Northcorders bootcamp. Now it has a completely functioning database and backend. The frontend is coming soon. All the endpoints are tested with Jest, and they also have effective error handling including user friendly error messages and appropriate status codes.
+NC News was a **Solo Project** I built during a Northcoders bootcamp. Now it has a completely functioning database and backend. The frontend is coming soon. All the endpoints are tested with Jest, and they also have effective error handling including user friendly error messages and appropriate status codes.
 
 I used JavaScript and Postgres SQL for database creation and seeding (see `/db folder`).
 
