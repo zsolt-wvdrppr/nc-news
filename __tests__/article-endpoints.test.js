@@ -220,7 +220,7 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.message).toBe("Incorrect article id format!");
       });
   });
-  test("500: If the comment body has 0 character should return Bad request error", () => {
+  test("400: If the comment body has 0 character should return Bad request error", () => {
     return request(app)
       .post("/api/articles/1/comments")
       .send({
@@ -234,7 +234,7 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.message).toBe("Comment is required!");
       });
   });
-  test("500: If the comment body has more than 500 character should return Bad request error", () => {
+  test("400: If the comment body has more than 500 character should return Bad request error", () => {
     const genContent = (len) => {
       let content = "";
       for (let i = 0; i < len; i++) {
@@ -368,7 +368,7 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.message).toBe("Incorrect article id format!");
       });
   });
-  test("500: If the comment body has incorrect key", () => {
+  test("400: If the req body has incorrect key", () => {
     const newVote = 100;
     return request(app)
       .patch("/api/articles/1")
@@ -382,7 +382,7 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.message).toBe("Invalid key!");
       });
   });
-  test("500: If the comment body's inc_votes' value's format is incorrect should return Bad request error", () => {
+  test("400: If the req body's inc_votes' value's format is incorrect should return Bad request error", () => {
     const newVote = "asdf";
     return request(app)
       .patch("/api/articles/1")

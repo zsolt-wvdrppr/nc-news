@@ -38,7 +38,7 @@ describe("DELETE /api/comments/:comment_id endpoint", () => {
         expect(message).toBe("Comment not found!");
       });
   });
-  test("400: If the article ID is invalid format, should return invalid type error", () => {
+  test("400: If the comment ID is invalid format, should return invalid type error", () => {
     return request(app)
       .delete("/api/comments/asdf")
       .expect(400)
