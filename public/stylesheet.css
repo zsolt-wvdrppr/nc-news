@@ -6,6 +6,12 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   color: #023047;
   box-sizing: border-box;
+  background: linear-gradient(
+    50deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 95%,
+    rgba(33, 158, 188, 0.1) 100%
+  );
 }
 
 footer {
@@ -22,9 +28,13 @@ header {
 h2 {
   padding-top: 25px;
   border-top: solid 3px rgb(233, 231, 229);
-  letter-spacing: 1.5px;
+  letter-spacing: 1.2px;
   color: #125768;
-  word-break: break-all;
+}
+
+h3 {
+  font-weight: 600;
+  margin-top: 32px;
 }
 
 main {
@@ -46,12 +56,12 @@ nav {
 }
 nav li {
   list-style: none;
-  word-break: break-all;
   padding: 10px 10px;
   transition: all 1.5s;
   border-radius: 10px 0 0 10px;
   border-left: solid 1px #219ebc;
   margin-bottom: 3px;
+  cursor: pointer;
 }
 nav li:hover {
   background-color: #219ebc;
@@ -68,6 +78,16 @@ nav a {
 }
 nav a .part1 {
   opacity: 0.8;
+  letter-spacing: 1.5px;
+}
+
+nav a .part2 {
+  display: flex;
+}
+
+#endpoints-container {
+  width: fit-content;
+  margin: 0 auto;
 }
 
 .qp-example {
@@ -76,7 +96,8 @@ nav a .part1 {
   width: fit-content;
 }
 
-code.res-body {
+code.res-body,
+code.req-body {
   font-family: "Courier New", Courier, monospace;
 }
 
@@ -96,7 +117,6 @@ pre {
   gap: 0 6px;
   align-content: center;
   width: fit-content;
-  margin-bottom: 5px;
   padding: 0 3px;
   border-radius: 6px;
   max-width: 100dvw;
@@ -105,6 +125,7 @@ pre {
 
 .status-codes-container {
   margin-bottom: 30px;
+  max-width: fit-content;
 }
 
 .status-codes-container div {
@@ -118,6 +139,7 @@ pre {
   padding: 0 3px;
   border-radius: 0 0 3px 3px;
   border-bottom: solid 3px rgb(240, 239, 239);
+  box-sizing: border-box;
 }
 
 .success .status-code {
@@ -143,6 +165,10 @@ pre {
 .status-description,
 .status-title {
   padding: 3px;
+}
+
+.status-title {
+  font-size: small;
 }
 
 @media (max-width: 900px) {

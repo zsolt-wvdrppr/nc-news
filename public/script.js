@@ -83,18 +83,18 @@ const addStatusCodes = (statusCodes, parentNode) => {
 const addMenuItem = (currentSection, parentNode) => {
   const navContainer = document.querySelector("nav ul");
   const navTemplate = document.getElementById("nav-template");
+  const endpointWithBreaks = currentSection.endpoint.split("/").join("/<wbr>");
   const cloneNavMenu = navTemplate.content.cloneNode(true);
   console.log(cloneNavMenu);
   cloneNavMenu.querySelector("li a span.part1").textContent =
     currentSection.method;
-  cloneNavMenu.querySelector("li a span.part2").textContent =
-    currentSection.endpoint;
+  cloneNavMenu.querySelector("li a span.part2").innerHTML = endpointWithBreaks;
   cloneNavMenu.querySelector("a").href = "#" + currentSection.anchor;
   navContainer.appendChild(cloneNavMenu);
 
   parentNode.querySelector("div").id = currentSection.anchor;
-  parentNode.querySelector("div h2").textContent =
-    `${currentSection.method} ${currentSection.endpoint}`;
+  parentNode.querySelector("div h2").innerHTML =
+    `${currentSection.method}<br>${endpointWithBreaks}`;
 };
 
 const addSectionTitles = (titles, nodeToAdd) => {
