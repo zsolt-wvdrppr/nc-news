@@ -21,9 +21,16 @@ const renderSections = async () => {
     addQueryParams(section.queryParams, cloneMain);
 
     // Add request body params
-    cloneMain.querySelector("div p.req-body").textContent = section.reqBody;
+    cloneMain.querySelector("div code.req-body").textContent =
+      typeof section.reqBody === "object" ?
+        JSON.stringify(section.reqBody, null, 2)
+      : section.reqBody;
+
     // Add response body params
-    cloneMain.querySelector("div p.res-body").textContent = section.resBody;
+    cloneMain.querySelector("div code.res-body").textContent =
+      typeof section.resBody === "object" ?
+        JSON.stringify(section.resBody, null, 2)
+      : section.resBody;
 
     // Add status codes
     addStatusCodes(section.statusCodes, cloneMain);
