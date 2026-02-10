@@ -1,79 +1,100 @@
-async function fetchData() {
+const renderSections = async () => {
   const response = await fetch("/api/data.json");
   const data = await response.json();
   const container = document.getElementById("endpoints-container");
-  const template = document.getElementById("endpoint-template");
-  const statusTemplate = document.getElementById("status-template");
-  const queryParamsTemplate = document.getElementById("query-params-template");
-  const notAvailableTemplate = document.getElementById("not-available");
-  const navTemplate = document.getElementById("nav-template");
-  const navContainer = document.querySelector("nav ul");
+  const mainTemplate = document.getElementById("endpoint-template");
 
   data.sections.forEach((section) => {
-    const clone = template.content.cloneNode(true);
-    const queryParamsContainer = clone.querySelector(
-      "div.query-params-container",
-    );
+    const cloneMain = mainTemplate.content.cloneNode(true);
 
     // Add nav menu
-    const cloneNavMenu = navTemplate.content.cloneNode(true);
-    console.log(cloneNavMenu);
-    cloneNavMenu.querySelector("li a span.part1").textContent = section.method;
-    cloneNavMenu.querySelector("li a span.part2").textContent =
-      section.endpoint;
-    cloneNavMenu.querySelector("a").href = "#" + section.anchor;
-    navContainer.appendChild(cloneNavMenu);
+    addMenuItem(section, cloneMain);
 
-    clone.querySelector("div").id = section.anchor;
-    clone.querySelector("div h2").textContent =
-      `${section.method} ${section.endpoint}`;
+    // Add section titles
+    addSectionTitles(data.sectionSubTitles, cloneMain);
 
-    // Get titles
-    data.sectionSubTitles.forEach((title) => {
-      const selector = Object.keys(title)[0];
-      clone.querySelector("h3." + selector).textContent = title[selector];
-    });
+    // Add description body
+    cloneMain.querySelector("div p.description").textContent =
+      section.description;
 
-    // Get description body
-    clone.querySelector("div p.description").textContent = section.description;
+    // Add query params body
+    addQueryParams(section.queryParams, cloneMain);
 
-    // Get query params body
-    if (section.queryParams) {
-      section.queryParams.forEach((queryParam) => {
-        const queryParamsClone = queryParamsTemplate.content.cloneNode(true);
+    // Add request body params
+    cloneMain.querySelector("div p.req-body").textContent = section.reqBody;
+    // Add response body params
+    cloneMain.querySelector("div p.res-body").textContent = section.resBody;
 
-        queryParamsClone.querySelector("div p.qp-example").textContent =
-          queryParam.description;
-        queryParamsClone.querySelector("div p.qp-description").textContent =
-          queryParam.example;
+    // Add status codes
+    addStatusCodes(section.statusCodes, cloneMain);
 
-        queryParamsContainer.appendChild(queryParamsClone);
-      });
-    } else {
-      const queryParamsClone = notAvailableTemplate.content.cloneNode(true);
-      queryParamsContainer.appendChild(queryParamsClone);
-    }
-
-    // Get request body params
-    clone.querySelector("div p.req-body").textContent = section.reqBody;
-    // Get response body params
-    clone.querySelector("div p.res-body").textContent = section.resBody;
-
-    // Get status codes
-    section.statusCodes.forEach((statusCode) => {
-      const statusClone = statusTemplate.content.cloneNode(true);
-      statusClone.querySelector("div").classList.add(statusCode.type);
-      statusClone.querySelector("div p.status-code").textContent =
-        statusCode.code;
-      statusClone.querySelector("div p.status-title").textContent =
-        statusCode.title;
-      statusClone.querySelector("div p.status-description").textContent =
-        statusCode.description;
-      clone.appendChild(statusClone);
-    });
-
-    container.appendChild(clone);
+    container.appendChild(cloneMain);
   });
-}
+};
 
-fetchData();
+const addQueryParams = (queryParams, parentNode) => {
+  const queryParamsTemplate = document.getElementById("query-params-template");
+  const notAvailableTemplate = document.getElementById("not-available");
+  const queryParamsContainer = parentNode.querySelector(
+    "div.query-params-container",
+  );
+  if (queryParams) {
+    queryParams.forEach((queryParam) => {
+      const queryParamsClone = queryParamsTemplate.content.cloneNode(true);
+
+      queryParamsClone.querySelector("div p.qp-example").textContent =
+        queryParam.example;
+      queryParamsClone.querySelector("div p.qp-description").textContent =
+        queryParam.description;
+
+      queryParamsContainer.appendChild(queryParamsClone);
+    });
+  } else {
+    const queryParamsClone = notAvailableTemplate.content.cloneNode(true);
+    queryParamsContainer.appendChild(queryParamsClone);
+  }
+};
+
+const addStatusCodes = (statusCodes, parentNode) => {
+  const statusCodesContainer = parentNode.querySelector(
+    "div.status-codes-container",
+  );
+  const statusTemplate = document.getElementById("status-template");
+  statusCodes.forEach((statusCode) => {
+    const statusClone = statusTemplate.content.cloneNode(true);
+    statusClone.querySelector("div").classList.add(statusCode.type);
+    statusClone.querySelector("div p.status-code").textContent =
+      statusCode.code;
+    statusClone.querySelector("div p.status-title").textContent =
+      statusCode.title;
+    statusClone.querySelector("div p.status-description").textContent =
+      statusCode.description;
+    statusCodesContainer.appendChild(statusClone);
+  });
+};
+
+const addMenuItem = (currentSection, parentNode) => {
+  const navContainer = document.querySelector("nav ul");
+  const navTemplate = document.getElementById("nav-template");
+  const cloneNavMenu = navTemplate.content.cloneNode(true);
+  console.log(cloneNavMenu);
+  cloneNavMenu.querySelector("li a span.part1").textContent =
+    currentSection.method;
+  cloneNavMenu.querySelector("li a span.part2").textContent =
+    currentSection.endpoint;
+  cloneNavMenu.querySelector("a").href = "#" + currentSection.anchor;
+  navContainer.appendChild(cloneNavMenu);
+
+  parentNode.querySelector("div").id = currentSection.anchor;
+  parentNode.querySelector("div h2").textContent =
+    `${currentSection.method} ${currentSection.endpoint}`;
+};
+
+const addSectionTitles = (titles, nodeToAdd) => {
+  titles.forEach((title) => {
+    const selector = Object.keys(title)[0];
+    nodeToAdd.querySelector("h3." + selector).textContent = title[selector];
+  });
+};
+
+renderSections();
