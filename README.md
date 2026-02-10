@@ -74,4 +74,8 @@ Run `npm run start`. It will start the server on port 8000 (or else if set other
 
 ## 👤About the author
 
-Junior Developer transitioning from digital marketing and technical operations, with a passion for solving practical problems. Experienced in automating workflows, integrating business requirements into technical solutions, and optimising platforms. Skilled in JavaScript, HTML, CSS, with a working knowledge of C# and Python, and hands-on experience building reliable, efficient, and user-focused applications. Driven by curiosity, persistence, and a problem-solving mindset to deliver practical, high-quality software solutions.
+Junior Developer transitioning from digital marketing and technical operations, focused on solving practical problems with clean, reliable code. Experienced in automating workflows, translating business requirements into technical solutions, and optimising web platforms.
+
+Strongest in JavaScript across the stack, with hands-on experience building REST APIs using Node.js/Express and PostgreSQL, applying TDD (Jest), MVC structure, and robust error handling. Comfortable delivering user-focused front ends with HTML, CSS, JavaScript, and React.
+
+Primary focus is the JavaScript ecosystem, but happy to refresh and ramp up C# and Python if a role requires it.
