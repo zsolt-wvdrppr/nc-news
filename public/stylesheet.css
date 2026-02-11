@@ -140,6 +140,7 @@ pre {
   border-radius: 0 0 3px 3px;
   border-bottom: solid 3px rgb(240, 239, 239);
   box-sizing: border-box;
+  align-items: center;
 }
 
 .success .status-code {
@@ -169,6 +170,23 @@ pre {
 
 .status-title {
   font-size: small;
+}
+
+.git-handle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0 6px;
+}
+
+.git-handle a {
+  text-decoration: none;
+  color: #125768;
+  transition: all 0.2s;
+}
+
+.git-handle a:hover {
+  transform: scale(1.02);
 }
 
 @media (max-width: 900px) {
