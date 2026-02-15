@@ -51,30 +51,30 @@ nav {
   left: 0;
   background-color: #023047;
   overflow-x: hidden;
-  padding-top: 60px;
   border-right: solid 5px #219ebc;
 }
 nav li {
   list-style: none;
+}
+
+nav ul {
+  padding-inline-start: 10px;
+}
+nav a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  font-size: large;
+  transition: all;
   padding: 10px 10px;
   transition: all 1.5s;
   border-radius: 10px 0 0 10px;
   border-left: solid 1px #219ebc;
   margin-bottom: 3px;
-  cursor: pointer;
 }
-nav li:hover {
+nav a:hover {
   background-color: #219ebc;
   background-blend-mode: color;
-}
-nav ul {
-  padding-inline-start: 10px;
-}
-nav a {
-  color: white;
-  text-decoration: none;
-  font-size: large;
-  transition: all;
 }
 nav a .part1 {
   opacity: 0.8;
