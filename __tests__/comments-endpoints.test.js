@@ -67,3 +67,79 @@ describe("DELETE /api/comments/:comment_id endpoint", () => {
       });
   });
 });
+
+describe("PATCH /api/comments/:comment_id update vote", () => {
+  test("201: Should return an object", () => {
+    return request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: 1 })
+      .expect(201)
+      .then(({ body: { comment } }) => {
+        expect(typeof comment).toBe("object");
+      });
+  });
+  test("201: Should return an object with following props under comment key: comment_id, article_id, body, votes, author, created_at", () => {
+    return request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: 1 })
+      .expect(201)
+      .then(({ body: { comment } }) => {
+        expect(typeof comment.comment_id).toBe("number");
+        expect(typeof comment.article_id).toBe("number");
+        expect(typeof comment.body).toBe("string");
+        expect(typeof comment.votes).toBe("number");
+        expect(typeof comment.author).toBe("string");
+        expect(typeof comment.created_at).toBe("string");
+      });
+  });
+  test("201: Should be updated in database", async () => {
+    // Get original votes
+    const beforeQuery = await db.query(
+      "SELECT votes FROM comments WHERE comment_id = $1;",
+      [1],
+    );
+    const votesBefore = beforeQuery.rows[0].votes;
+
+    // Make the request
+    await request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: 1 })
+      .expect(201);
+
+    // Check database AFTER request completes
+    const afterQuery = await db.query(
+      "SELECT votes FROM comments WHERE comment_id = $1;",
+      [1],
+    );
+    const votesAfter = afterQuery.rows[0].votes;
+
+    expect(votesAfter).toBe(votesBefore + 1);
+  });
+  test("201: Should return the updated comment obj", () => {
+    return request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: 1 })
+      .expect(201)
+      .then(({ body: { comment } }) => {
+        expect(comment.votes).toBe(17);
+      });
+  });
+  test("404: Should return status 404 if comment id does not exist", () => {
+    return request(app)
+      .patch("/api/comments/10000")
+      .send({ inc_votes: 1 })
+      .expect(404);
+  });
+  test("400: Should return status 400 if comment id format invalid", () => {
+    return request(app)
+      .patch("/api/comments/1sdf")
+      .send({ inc_votes: 1 })
+      .expect(400);
+  });
+  test("400: Should return status 400 if increment amount is invalid format", () => {
+    return request(app)
+      .patch("/api/comments/1sdf")
+      .send({ inc_votes: "1sd" })
+      .expect(400);
+  });
+});
