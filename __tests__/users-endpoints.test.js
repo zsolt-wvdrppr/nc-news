@@ -56,3 +56,22 @@ describe("Model testing: fetchUserByUsername()", () => {
     });
   });
 });
+
+describe("GET /api/users/:username", () => {
+  test("200: /api/users/:username should be available", () => {
+    return request(app).get("/api/users/icellusedkars").expect(200);
+  });
+  test("200: Should contain props under user key: username, name, avatar_url", () => {
+    return request(app)
+      .get("/api/users/icellusedkars")
+      .expect(200)
+      .then(({ body: { user } }) => {
+        expect(user.username).toBe("icellusedkars");
+        expect(typeof user.name).toBeString();
+        expect(typeof avatar_url).toBeString();
+      });
+  });
+  test("404: Should return status 404 if user not found by provided username", () => {
+    return request(app).get("/api/users/asdf").expect(404);
+  });
+});
