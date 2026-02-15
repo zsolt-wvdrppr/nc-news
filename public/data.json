@@ -255,6 +255,49 @@
       ]
     },
     {
+      "anchor": "update-comment-vote",
+      "method": "PATCH",
+      "endpoint": "/api/comments/:comment_id",
+      "description": "This endpoint updates the votes of a specified comment.",
+      "reqBody": { "inc_votes": "integer" },
+      "resBody": {
+        "comment": {
+          "comment_id": "[number]",
+          "article_id": "[number]",
+          "body": "[string]",
+          "votes": "[number]",
+          "author": "[string]",
+          "created_at": "[string]"
+        }
+      },
+      "statusCodes": [
+        {
+          "type": "success",
+          "code": "201",
+          "title": "OK",
+          "description": "Comment successfully updated. It returns the updated comment object."
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Invalid Type Error",
+          "description": "Incorrect comment ID format. Must be a number!"
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Invalid Type Error",
+          "description": "Incorrect or missing incrementation amount in the body. Must be a number!"
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found Error",
+          "description": "Comment not found"
+        }
+      ]
+    },
+    {
       "anchor": "delete-comment",
       "method": "DELETE",
       "endpoint": "/api/comments/:comment_id",
@@ -327,6 +370,35 @@
           "code": "200",
           "title": "OK",
           "description": "Responds with an array on the key of users."
+        }
+      ]
+    },
+    {
+      "anchor": "get-user-by-username",
+      "method": "GET",
+      "endpoint": "/api/users/:username",
+      "description": "This endpoint returns a specified user from the database.",
+
+      "reqBody": "N/A",
+      "resBody": {
+        "user": {
+          "username": "[string]",
+          "name": "[string]",
+          "avatar_url": "[string]"
+        }
+      },
+      "statusCodes": [
+        {
+          "type": "success",
+          "code": "200",
+          "title": "OK",
+          "description": "User fetched succesfully"
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found",
+          "description": "User not found by the specified username."
         }
       ]
     }
