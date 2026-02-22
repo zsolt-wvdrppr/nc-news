@@ -29,6 +29,8 @@ exports.getAllArticles = async (
   if (topic) await validateTopicSlug(topic);
   validateArticleSortByColumnName(sort_by);
   validateOrder(order);
+  if (!Number(limit)) throw new InvalidTypeError("Limit must be a number!");
+  if (!Number(p)) throw new InvalidTypeError("Parameter 'p' must be a number!");
   const result = await fetchAllArticles(sort_by, order, topic, limit, p);
   if (result.total_count && result.articles.length === 0)
     throw new NotFoundError(`Requested page (${p}) exceded page count!`);

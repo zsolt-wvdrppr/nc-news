@@ -669,4 +669,10 @@ describe("GET /api/articles pagination", () => {
   test("404: Should return 404 Not Found Error if p (page) set to higher than the last page", () => {
     return request(app).get("/api/articles?p=200").expect(404);
   });
+  test("400: Should return 400 Invalid Type Error if p isn't a number", () => {
+    return request(app).get("/api/articles?p=asdf").expect(400);
+  });
+  test("400: Should return 400 Invalid Type Error if limit isn't a number", () => {
+    return request(app).get("/api/articles?limit=asdf").expect(400);
+  });
 });
