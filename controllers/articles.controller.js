@@ -5,7 +5,10 @@ const {
   getCommentsByArticleId: getCommentsByArticleIdService,
   addCommentToArticle: addCommentToArticleService,
   incVotesByArticleId: incVotesByArticleIdService,
+  postNewArticle: postNewArticleService,
 } = require("../services/articles.service");
+
+const { validateRequestBody } = require("./utils");
 
 exports.getAllArticles = async (req, res, next) => {
   const {
@@ -46,7 +49,7 @@ exports.getCommentsByArticleId = async (req, res, next) => {
 exports.addCommentToArticle = async (req, res, next) => {
   const { articleId } = req.params;
   const reqBody = req.body;
-  if (reqBody === undefined) throw new BadRequestError("Missing request body!");
+  validateRequestBody(reqBody);
   const { username, body } = reqBody;
 
   try {
@@ -60,7 +63,7 @@ exports.addCommentToArticle = async (req, res, next) => {
 exports.incVotesByArticleId = async (req, res, next) => {
   const { articleId } = req.params;
   const body = req.body;
-  if (body === undefined) throw new BadRequestError("Missing request body!");
+  validateRequestBody(body);
 
   try {
     const article = await incVotesByArticleIdService(articleId, body);
@@ -68,4 +71,9 @@ exports.incVotesByArticleId = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+exports.postNewArticle = async (req, res, next) => {
+  const body = req.body;
+  validateRequestBody(body);
 };
