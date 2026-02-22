@@ -5,6 +5,8 @@ exports.fetchAllArticles = async (
   sort_by = "created_at",
   order = "desc",
   topic = null,
+  limit = 10,
+  p = 1,
 ) => {
   const query =
     topic ?
@@ -15,9 +17,15 @@ exports.fetchAllArticles = async (
         order,
       )
     : format("SELECT * FROM articles ORDER BY %s %s", sort_by, order);
+  const totalCountQuery = await db.query(`SELECT COUNT(*) FROM articles`);
   const result = await db.query(format(query, sort_by, order));
 
-  return result.rows;
+  const totalCount = parseInt(totalCountQuery.rows[0].count);
+
+  return {
+    articles: result.rows,
+    total_count: totalCount,
+  };
 };
 
 exports.fetchArticleById = async (article_id) => {

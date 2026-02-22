@@ -619,3 +619,15 @@ describe("POST /api/articles", () => {
       .expect(400);
   });
 });
+
+describe("GET /api/articles pagination", () => {
+  test("200: The retunred object should have a total_count prop besides articles", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        const { articles, total_count } = response.body;
+        expect(total_count).toBe(13);
+      });
+  });
+});

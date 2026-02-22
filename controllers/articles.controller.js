@@ -18,8 +18,8 @@ exports.getAllArticles = async (req, res, next) => {
   } = req.query;
 
   try {
-    const articles = await getAllArticlesService(sortBy, order, topic);
-    res.status(200).send({ articles });
+    const responseObj = await getAllArticlesService(sortBy, order, topic);
+    res.status(200).send(responseObj);
   } catch (err) {
     next(err);
   }
