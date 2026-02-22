@@ -15,10 +15,18 @@ exports.getAllArticles = async (req, res, next) => {
     sortBy = "created_at",
     order = "desc",
     topic = undefined,
+    limit = 10,
+    p = 1,
   } = req.query;
 
   try {
-    const responseObj = await getAllArticlesService(sortBy, order, topic);
+    const responseObj = await getAllArticlesService(
+      sortBy,
+      order,
+      topic,
+      limit,
+      p,
+    );
     res.status(200).send(responseObj);
   } catch (err) {
     next(err);

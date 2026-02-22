@@ -1,3 +1,4 @@
+const { off } = require("../app");
 const db = require("../db/connection");
 const format = require("pg-format");
 
@@ -8,19 +9,47 @@ exports.fetchAllArticles = async (
   limit = 10,
   p = 1,
 ) => {
+  const requestTotalCount =
+    topic ?
+      await db.query(`SELECT COUNT(*) FROM articles WHERE topic = $1`, [topic])
+    : await db.query(`SELECT COUNT(*) FROM articles`);
+  const totalCount = parseInt(requestTotalCount.rows[0].count);
+  const lastPage = Math.ceil(totalCount / limit);
+
+  if (p > lastPage)
+    return {
+      articles: [],
+      total_count: totalCount,
+    };
+  const offset = (p - 1) * limit;
+
   const query =
     topic ?
       format(
-        "SELECT * FROM articles WHERE topic = %L ORDER BY %s %s",
+        `SELECT * FROM articles
+        WHERE topic = %L
+        ORDER BY %s %s
+        LIMIT %s
+        OFFSET %s`,
         topic,
         sort_by,
         order,
+        limit,
+        offset,
       )
-    : format("SELECT * FROM articles ORDER BY %s %s", sort_by, order);
-  const totalCountQuery = await db.query(`SELECT COUNT(*) FROM articles`);
-  const result = await db.query(format(query, sort_by, order));
+    : format(
+        `
+      SELECT * FROM articles
+      ORDER BY %s %s
+      LIMIT %s
+      OFFSET %s`,
+        sort_by,
+        order,
+        limit,
+        offset,
+      );
 
-  const totalCount = parseInt(totalCountQuery.rows[0].count);
+  const result = await db.query(format(query, sort_by, order));
 
   return {
     articles: result.rows,

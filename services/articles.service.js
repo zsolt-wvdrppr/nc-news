@@ -23,11 +23,15 @@ exports.getAllArticles = async (
   sort_by = "created_at",
   order = "desc",
   topic = undefined,
+  limit = 10,
+  p = 1,
 ) => {
   if (topic) await validateTopicSlug(topic);
   validateArticleSortByColumnName(sort_by);
   validateOrder(order);
-  const result = await fetchAllArticles(sort_by, order, topic);
+  const result = await fetchAllArticles(sort_by, order, topic, limit, p);
+  if (result.total_count && result.articles.length === 0)
+    throw new NotFoundError(`Requested page (${p}) exceded page count!`);
   return result;
 };
 

@@ -34,7 +34,7 @@ describe("GET: /api/articles", () => {
   });
   test("200: Articles array contains 13 articles", () => {
     return request(app)
-      .get("/api/articles")
+      .get("/api/articles?limit=100")
       .expect(200)
       .then(({ body }) => {
         expect(body.articles).toHaveLength(13);
@@ -629,5 +629,44 @@ describe("GET /api/articles pagination", () => {
         const { articles, total_count } = response.body;
         expect(total_count).toBe(13);
       });
+  });
+  test("200: The retunred object should have a total_count prop besides articles and the count should be 1 if topic is set to cats", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then((response) => {
+        const { articles, total_count } = response.body;
+        expect(total_count).toBe(1);
+      });
+  });
+  test("200: Should return 10 items in the object under articles key by default", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        const { articles } = response.body;
+        expect(articles.length).toBe(10);
+      });
+  });
+  test("200: Should return 11 items in the object under articles if limit is set to 11", () => {
+    return request(app)
+      .get("/api/articles?limit=11")
+      .expect(200)
+      .then((response) => {
+        const { articles } = response.body;
+        expect(articles.length).toBe(11);
+      });
+  });
+  test("200: Should return 3 items in the object under articles key if p (page) set to 2", () => {
+    return request(app)
+      .get("/api/articles?p=2")
+      .expect(200)
+      .then((response) => {
+        const { articles } = response.body;
+        expect(articles.length).toBe(3);
+      });
+  });
+  test("404: Should return 404 Not Found Error if p (page) set to higher than the last page", () => {
+    return request(app).get("/api/articles?p=200").expect(404);
   });
 });
