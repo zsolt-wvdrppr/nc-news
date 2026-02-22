@@ -74,6 +74,27 @@ exports.incVotesByArticleId = async (req, res, next) => {
 };
 
 exports.postNewArticle = async (req, res, next) => {
-  const body = req.body;
-  validateRequestBody(body);
+  const reqBody = req.body;
+  validateRequestBody(reqBody);
+
+  const {
+    author,
+    title,
+    body,
+    topic,
+    article_img_url = "placeholder.webp",
+  } = reqBody;
+
+  try {
+    const article = await postNewArticleService(
+      author,
+      title,
+      body,
+      topic,
+      article_img_url,
+    );
+    res.status(201).send({ article });
+  } catch (err) {
+    next(err);
+  }
 };

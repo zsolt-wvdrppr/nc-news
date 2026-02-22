@@ -5,11 +5,12 @@ const {
   getCommentsByArticleId,
   addCommentToArticle,
   incVotesByArticleId,
+  postNewArticle,
 } = require("../controllers/articles.controller");
 
 const articlesRouter = app.Router();
 
-articlesRouter.get("/", getAllArticles);
+articlesRouter.route("/").get(getAllArticles).post(postNewArticle);
 articlesRouter
   .route("/:articleId")
   .get(getArticleById)

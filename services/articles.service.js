@@ -1,12 +1,14 @@
 const BadRequestError = require("../errors/BadRequestError");
 const InvalidTypeError = require("../errors/InvalidTypeError");
 const NotFoundError = require("../errors/NotFoundError");
+const ServerError = require("../errors/ServerError");
 const {
   fetchAllArticles,
   fetchArticleById,
   fetchCommentsByArticleId,
   createCommentForArticle,
   updateVotesOfArticle,
+  insertArticle,
 } = require("../models/articles.model");
 const {
   validateArticleId,
@@ -67,4 +69,39 @@ exports.incVotesByArticleId = async (article_id, body) => {
   if (!parseInt(body.inc_votes))
     throw new BadRequestError("Increment amount must be a number!");
   return await updateVotesOfArticle(article_id, body);
+};
+
+exports.postNewArticle = async (
+  author,
+  title,
+  body,
+  topic,
+  article_img_url = "placeholder.webp",
+) => {
+  // check if artist exist
+  await validateUsername(author);
+
+  // check if topic exist
+  await validateTopicSlug(topic);
+
+  // check rest of values validity
+  if (!title) throw new BadRequestError("Title is required!");
+  if (title.length > 255)
+    throw new BadRequestError("Title must be no more than 255 characters!");
+  if (!body) throw new BadRequestError("Body is required!");
+  if (body.length > 600)
+    throw new BadRequestError("Body must be no more than 600 characters!");
+
+  const newArticle = await insertArticle(
+    author,
+    title,
+    body,
+    topic,
+    article_img_url,
+  );
+  if (newArticle === undefined)
+    throw new ServerError("Article insertion has failed!");
+  const newArticleId = newArticle.article_id;
+
+  return fetchArticleById(newArticleId);
 };

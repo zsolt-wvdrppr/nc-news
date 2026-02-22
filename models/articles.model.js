@@ -68,3 +68,21 @@ exports.updateVotesOfArticle = async (article_id, body) => {
   );
   return result.rows[0];
 };
+
+exports.insertArticle = async (
+  author,
+  title,
+  body,
+  topic,
+  article_img_url = "placeholder.webp",
+) => {
+  const result = await db.query(
+    `INSERT INTO articles (author, title, body, topic, article_img_url)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING *
+    `,
+    [author, title, body, topic, article_img_url],
+  );
+
+  return result.rows[0];
+};

@@ -7,6 +7,13 @@ const {
   createCommentForArticle,
   updateVotesOfArticle,
 } = require("../models/articles.model.js");
+const generateText = (len = 3) => {
+  let output = "";
+  for (let i = 0; i < len; i++) {
+    output += "a";
+  }
+  return output;
+};
 
 beforeEach(() => {
   return seed(data);
@@ -495,5 +502,120 @@ describe("GET /api/articles/:article_id (comment_count)", () => {
         expect(typeof parseInt(article.comment_count)).toBe("number");
         expect(parseInt(article.comment_count)).toBe(11);
       });
+  });
+});
+
+describe("POST /api/articles", () => {
+  test("201: Should be avilable on /api/articles", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        author: "icellusedkars",
+        title: "Issa new article",
+        body: "Loerm ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
+        topic: "mitch",
+        article_img_url: "",
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(201)
+      .then(({ body: { article } }) => {
+        expect(article).toBeObject();
+      });
+  });
+  test("201: Should return the newly added article with following props: author, title, body, topic, article_img_url, article_id, votes, created_at, comment_count.", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        author: "icellusedkars",
+        title: "Issa new article",
+        body: "Loerm ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
+        topic: "mitch",
+        article_img_url: "",
+      })
+      .expect(201)
+      .then(({ body: { article } }) => {
+        expect(article).toBeObject();
+        expect(article.article_id).toBe(14);
+        expect(article.title).toBeString();
+        expect(article.topic).toBeString();
+        expect(article.author).toBeString();
+        expect(article.body).toBeString();
+        expect(article.created_at).toBeString();
+        expect(article.votes).toBeNumber();
+        expect(article.article_img_url).toBeString();
+        expect(Number(article.comment_count)).toBeNumber();
+      });
+  });
+  test("404: Should return Not Found Error if author does not exist or missing.", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        title: "Issa new article",
+        body: "Loerm ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
+        topic: "mitch",
+        article_img_url: "",
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(404);
+  });
+  test("404: Should return Not Found Error if topic does not exist or missing.", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        author: "icellusedkars",
+        title: "Issa new article",
+        body: "Loerm ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
+        article_img_url: "",
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(404);
+  });
+  test("400: Should return Bad Request Error if article title or body missing from request body.", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        author: "icellusedkars",
+        topic: "mitch",
+        body: "Loerm ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
+        article_img_url: "",
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(400);
+  });
+  test("400: Should return Bad Request Error if article title is longer than 255 char.", () => {
+    const testContent256length = generateText(256);
+
+    return request(app)
+      .post("/api/articles")
+      .send({
+        author: "icellusedkars",
+        title: testContent256length,
+        topic: "mitch",
+        body: "Loerm ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
+        article_img_url: "",
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(400);
+  });
+  test("400: Should return Bad Request Error if article body is longer than 600 char.", () => {
+    const testContent601length = generateText(601);
+
+    return request(app)
+      .post("/api/articles")
+      .send({
+        author: "icellusedkars",
+        title: testContent601length,
+        topic: "mitch",
+        body: "Loerm ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
+        article_img_url: "",
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /application\/json/)
+      .expect(400);
   });
 });
