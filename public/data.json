@@ -11,14 +11,25 @@
       "anchor": "get-all-articles",
       "method": "GET",
       "endpoint": "/api/articles",
-      "description": "This endpoint lists all available articles from the database.",
+      "description": "This endpoint lists all available articles from the database. The list is paginated with a 10 item per page limit by default.",
       "queryParams": [
         {
           "example": "sortBy=[column]",
           "description": "Sort articles by column"
         },
         { "example": "order=[asc/desc]", "description": "Sorting order" },
-        { "example": "topic=[slag]", "description": "Filter articles by topic" }
+        {
+          "example": "topic=[slag]",
+          "description": "Filter articles by topic"
+        },
+        {
+          "example": "limit=[number]",
+          "description": "Limit parameter defines the number of items returned in a single request. Set to 10 by default."
+        },
+        {
+          "example": "p=[number]",
+          "description": "P parameter stands for page, defines which page to start from in the current request. Starts from 1."
+        }
       ],
       "reqBody": "N/A",
       "resBody": {
@@ -34,7 +45,8 @@
             "votes": "[number]",
             "article_img_url": "[string]"
           }
-        ]
+        ],
+        "total_count": "[number]"
       },
       "statusCodes": [
         {
@@ -57,9 +69,27 @@
         },
         {
           "type": "error",
+          "code": "400",
+          "title": "Invalid Type Error",
+          "description": "Parameter 'p' must be a number!"
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Invalid Type Error",
+          "description": "Limit must be a number!"
+        },
+        {
+          "type": "error",
           "code": "404",
           "title": "Not Found Error",
           "description": "Filtered topic does not exist."
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found Error",
+          "description": "Requested page [num] exceded page count! Occurs when p query parameter is set to higher than the max page count."
         }
       ]
     },
