@@ -401,6 +401,58 @@
           "description": "User not found by the specified username."
         }
       ]
+    },
+    {
+      "anchor": "post-new-article",
+      "method": "POST",
+      "endpoint": "/api/articles",
+      "description": "This endpoint posts a new article and returns the newly posted article object.",
+      "reqBody": {
+        "author": "[string]",
+        "title": "[string, 255 max length]",
+        "body": "[string, 600 max length]",
+        "topic": "[string]",
+        "article_img_url": "[string]"
+      },
+      "resBody": {
+        "article": {
+          "comment_count": "[number as a string]",
+          "article_id": "[number]",
+          "title": "[string]",
+          "topic": "[string]",
+          "author": "[string]",
+          "body": "[string]",
+          "created_at": "[string]",
+          "votes": "[number]",
+          "article_img_url": "[string]"
+        }
+      },
+      "statusCodes": [
+        {
+          "type": "success",
+          "code": "201",
+          "title": "OK",
+          "description": "Responds with an object on the key of article."
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found Error",
+          "description": "Occurs if author or topic missing from request body, or does not exist in database."
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Bad Request Error",
+          "description": "Occurs if title or body is missing from the request body, or the request body is missing."
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Bad Request Error",
+          "description": "Article body or title is too long. Body must be no more than 600 and title no more than 255 character!"
+        }
+      ]
     }
   ]
 }
