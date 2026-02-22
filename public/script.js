@@ -4,7 +4,31 @@ const renderSections = async () => {
   const container = document.getElementById("endpoints-container");
   const mainTemplate = document.getElementById("endpoint-template");
 
-  data.sections.forEach((section) => {
+  const methodOrder = {
+    get: 1,
+    post: 2,
+    patch: 3,
+    delete: 4,
+  };
+
+  const compareFn = (a, b) => {
+    if (
+      a.endpoint < b.endpoint ||
+      methodOrder[a.method] < methodOrder[b.method]
+    ) {
+      return -1;
+    } else if (
+      a.endpoint > b.endpoint ||
+      methodOrder[a.method] > methodOrder[b.method]
+    ) {
+      return 1;
+    } else {
+      return 0;
+    }
+  };
+
+  const sortedDataSections = data.sections.sort(compareFn);
+  sortedDataSections.forEach((section) => {
     const cloneMain = mainTemplate.content.cloneNode(true);
 
     // Add nav menu
@@ -85,7 +109,7 @@ const addMenuItem = (currentSection, parentNode) => {
   const navTemplate = document.getElementById("nav-template");
   const endpointWithBreaks = currentSection.endpoint.split("/").join("/<wbr>");
   const cloneNavMenu = navTemplate.content.cloneNode(true);
-  console.log(cloneNavMenu);
+
   cloneNavMenu.querySelector("li a span.part1").textContent =
     currentSection.method;
   cloneNavMenu.querySelector("li a span.part2").innerHTML = endpointWithBreaks;
