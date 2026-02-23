@@ -43,37 +43,37 @@ describe("GET: /api/topics", () => {
   });
 });
 
-/*describe("GET /api/topics/:topics_id", () => {
-  test("200: Should be available on /api/topics/:article_id", () => {
-    return request(app).get("/api/topics/1").expect(200);
-  });
-  test("200: Should return an object under the key article", () => {
+describe("POST /api/topics", () => {
+  test("201: Should be available on /api/topics", () => {
     return request(app)
-      .get("/api/topics/1")
-      .expect(200)
-      .then((res) => {
-        const { article } = res.body;
-        expect(article).toBeObject();
+      .post("/api/topics")
+      .send({
+        slug: "plants",
+        description: "This topic has everything that involves plants",
+      })
+      .expect(201);
+  });
+  test("201: Should return a topic object containing the newly added topic", () => {
+    return request(app)
+      .post("/api/topics")
+      .send({
+        slug: "plants",
+        description: "This topic has everything that involves plants",
+      })
+      .expect(201)
+      .then(({ body: { topic } }) => {
+        expect(topic).toBeObject();
+        expect(topic.description).toBeString();
+        expect(topic.slug).toBe("plants");
+        expect(topic.img_url).toBe("placeholder.webp");
       });
   });
-  test("200: A returned article object should have props: article_id, title, topic, author, body, created_at, votes, article_img_url", () => {
+  test("400: Should return bad request error if either description or title missing", () => {
     return request(app)
-      .get("/api/topics/1")
-      .expect(200)
-      .expect("content-type", /application\/json/)
-      .then((res) => {
-        const { article } = res.body;
-        expect(article.article_id).toBe(1);
-        expect(article.title).toBeString();
-        expect(article.topic).toBeString();
-        expect(article.author).toBeString();
-        expect(article.body).toBeString();
-        expect(article.created_at).toBeString();
-        expect(article.votes).toBeNumber();
-        expect(article.article_img_url).toBeString();
-      });
+      .post("/api/topics")
+      .send({
+        description: "This topic has everything that involves plants",
+      })
+      .expect(400);
   });
-  test("404: Should return 404 Not Found if id not found", () => {
-    return request(app).get("/api/topics/100").expect(404);
-  });
-});*/
+});

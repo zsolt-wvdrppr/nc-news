@@ -10,7 +10,11 @@ exports.fetchTopicBySlug = async (slug) => {
   return result.rows[0];
 };
 
-exports.insertNewTopic = async (description, slug, img_url) => {
+exports.insertNewTopic = async (
+  description,
+  slug,
+  img_url = "placeholder.webp",
+) => {
   const result = await db.query(
     `
     INSERT INTO topics (description, slug, img_url)
