@@ -4,6 +4,14 @@ const data = require("../db/data/test-data/index.js");
 const request = require("supertest");
 const app = require("../app.js");
 
+const generateText = (len = 3) => {
+  let output = "";
+  for (let i = 0; i < len; i++) {
+    output += "a";
+  }
+  return output;
+};
+
 beforeEach(() => {
   return seed(data);
 });
@@ -73,6 +81,28 @@ describe("POST /api/topics", () => {
       .post("/api/topics")
       .send({
         description: "This topic has everything that involves plants",
+      })
+      .expect(400);
+  });
+  test("400: Should return bad request error if description longer than 255 chars", () => {
+    const desc = generateText(256);
+
+    return request(app)
+      .post("/api/topics")
+      .send({
+        slug: "asdf",
+        description: desc,
+      })
+      .expect(400);
+  });
+  test("400: Should return bad request error if slug longer than 55 chars", () => {
+    const slug = generateText(56);
+
+    return request(app)
+      .post("/api/topics")
+      .send({
+        slug: slug,
+        description: "Description",
       })
       .expect(400);
   });
