@@ -512,6 +512,50 @@
           "description": "Article body or title is too long. Body must be no more than 600 and title no more than 255 character!"
         }
       ]
+    },
+    {
+      "anchor": "post-new-topic",
+      "method": "POST",
+      "endpoint": "/api/topics",
+      "description": "This endpoint posts a new topic and returns the newly posted topic object.",
+      "reqBody": {
+        "description": "[string, 255 max length]",
+        "slug": "[string, 55 max length]",
+        "article_img_url": "[string]"
+      },
+      "resBody": {
+        "article": {
+          "description": "[string]",
+          "slug": "[string]",
+          "img_url": "[string]"
+        }
+      },
+      "statusCodes": [
+        {
+          "type": "success",
+          "code": "201",
+          "title": "OK",
+          "description": "Responds with an object on the key of article."
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found Error",
+          "description": "Occurs if author or topic missing from request body, or does not exist in database."
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Bad Request Error",
+          "description": "Occurs if title or body is missing from the request body, or the request body is missing."
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Bad Request Error",
+          "description": "Topic description or slug is too long. Description must be no more than 255 and slug no more than 55 character!"
+        }
+      ]
     }
   ]
 }
