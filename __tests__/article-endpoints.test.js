@@ -107,7 +107,7 @@ describe("GET: /api/articles/:article_id/comments", () => {
   });
   test("200: Comments array contains 11 comments (of article id=1)", () => {
     return request(app)
-      .get("/api/articles/1/comments")
+      .get("/api/articles/1/comments?limit=100")
       .expect(200)
       .then(({ body }) => {
         expect(body.comments).toHaveLength(11);
@@ -674,5 +674,53 @@ describe("GET /api/articles pagination", () => {
   });
   test("400: Should return 400 Invalid Type Error if limit isn't a number", () => {
     return request(app).get("/api/articles?limit=asdf").expect(400);
+  });
+});
+
+describe("GET /api/articles/:article_id/comments pagination", () => {
+  test("200: The retunred object should have a total_count prop besides comments", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        const { total_count } = response.body;
+        expect(total_count).toBe(11);
+      });
+  });
+  test("200: Should return 10 items in the object under articles key by default", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        const { comments } = response.body;
+        expect(comments.length).toBe(10);
+      });
+  });
+  test("200: Should return 11 items in the object under articles if limit is set to 11", () => {
+    return request(app)
+      .get("/api/articles/1/comments?limit=11")
+      .expect(200)
+      .then((response) => {
+        const { comments } = response.body;
+        expect(comments.length).toBe(11);
+      });
+  });
+  test("200: Should return 3 items in the object under articles key if p (page) set to 2", () => {
+    return request(app)
+      .get("/api/articles/1/comments?p=2")
+      .expect(200)
+      .then((response) => {
+        const { comments } = response.body;
+        expect(comments.length).toBe(1);
+      });
+  });
+  test("404: Should return 404 Not Found Error if p (page) set to higher than the last page", () => {
+    return request(app).get("/api/articles/1/comments?p=200").expect(404);
+  });
+  test("400: Should return 400 Invalid Type Error if p isn't a number", () => {
+    return request(app).get("/api/articles/1/comments?p=asdf").expect(400);
+  });
+  test("400: Should return 400 Invalid Type Error if limit isn't a number", () => {
+    return request(app).get("/api/articles/1/comments?limit=asdf").expect(400);
   });
 });

@@ -9,11 +9,11 @@ exports.fetchAllArticles = async (
   limit = 10,
   p = 1,
 ) => {
-  const requestTotalCount =
+  const totalCountResponse =
     topic ?
       await db.query(`SELECT COUNT(*) FROM articles WHERE topic = $1`, [topic])
     : await db.query(`SELECT COUNT(*) FROM articles`);
-  const totalCount = parseInt(requestTotalCount.rows[0].count);
+  const totalCount = parseInt(totalCountResponse.rows[0].count);
   const lastPage = Math.ceil(totalCount / limit);
 
   if (p > lastPage)
@@ -81,12 +81,30 @@ GROUP BY
   return result.rows[0];
 };
 
-exports.fetchCommentsByArticleId = async (article_id) => {
-  const result = await db.query(
-    "SELECT * FROM comments WHERE article_id = $1",
+exports.fetchCommentsByArticleId = async (article_id, limit = 10, p = 1) => {
+  const totalCountResponse = await db.query(
+    `SELECT COUNT(*) FROM comments where article_id = $1`,
     [article_id],
   );
-  return result.rows;
+
+  const totalCount = parseInt(totalCountResponse.rows[0].count);
+  const lastPage = Math.ceil(totalCount / limit);
+
+  if (p > lastPage)
+    return {
+      comments: [],
+      total_count: totalCount,
+    };
+  const offset = (p - 1) * limit;
+
+  const result = await db.query(
+    `SELECT * FROM comments
+    WHERE article_id = $1
+    LIMIT $2
+    OFFSET $3`,
+    [article_id, limit, offset],
+  );
+  return { comments: result.rows, total_count: totalCount };
 };
 
 exports.createCommentForArticle = async (article_id, username, body) => {

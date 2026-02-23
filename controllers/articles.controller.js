@@ -46,9 +46,14 @@ exports.getArticleById = async (req, res, next) => {
 
 exports.getCommentsByArticleId = async (req, res, next) => {
   const { articleId } = req.params;
+  const { limit = 10, p = 1 } = req.query;
   try {
-    const comments = await getCommentsByArticleIdService(articleId);
-    res.status(200).send({ comments });
+    const responseObj = await getCommentsByArticleIdService(
+      articleId,
+      limit,
+      p,
+    );
+    res.status(200).send(responseObj);
   } catch (err) {
     next(err);
   }

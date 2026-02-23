@@ -42,16 +42,20 @@ exports.getArticleById = async (article_id) => {
   return await fetchArticleById(article_id);
 };
 
-exports.getCommentsByArticleId = async (article_id) => {
+exports.getCommentsByArticleId = async (article_id, limit = 10, p = 1) => {
   await validateArticleId(article_id);
 
-  const result = await fetchCommentsByArticleId(article_id);
+  if (!Number(limit)) throw new InvalidTypeError("Limit must be a number!");
+  if (!Number(p)) throw new InvalidTypeError("Parameter 'p' must be a number!");
+
+  const result = await fetchCommentsByArticleId(article_id, limit, p);
 
   if (result === undefined) {
     throw new NotFoundError("No comments found!");
-  } else {
-    return result;
   }
+  if (result.total_count && result.comments.length === 0)
+    throw new NotFoundError(`Requested page (${p}) exceded page count!`);
+  return result;
 };
 
 exports.addCommentToArticle = async (article_id, username, body) => {
