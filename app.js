@@ -4,8 +4,11 @@ const articlesRouter = require("./routes/articles.routes");
 const usersRouter = require("./routes/users.routes");
 const commentsRouter = require("./routes/comments.routes");
 const NotFoundError = require("./errors/NotFoundError");
+const cors = require("cors");
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
