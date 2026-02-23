@@ -138,7 +138,7 @@
       "anchor": "get-comments-of-article",
       "method": "GET",
       "endpoint": "/api/articles/:article_id/comments",
-      "description": "This endpoint lists all comments of a specified article from the database.",
+      "description": "This endpoint lists all comments of a specified article from the database. The list is paginated with a 10 item per page limit by default.",
       "reqBody": "N/A",
       "resBody": {
         "comments": [
@@ -150,8 +150,19 @@
             "author": "[string]",
             "created_at": "[string]"
           }
-        ]
+        ],
+        "total_count": "[number]"
       },
+      "queryParams": [
+        {
+          "example": "limit=[number]",
+          "description": "Limit parameter defines the number of items returned in a single request. Set to 10 by default."
+        },
+        {
+          "example": "p=[number]",
+          "description": "P parameter stands for page, defines which page to start from in the current request. Starts from 1."
+        }
+      ],
       "statusCodes": [
         {
           "type": "success",
@@ -176,6 +187,24 @@
           "code": "400",
           "title": "Invalid Type Error",
           "description": "Incorrect article id format. Must be a number."
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Invalid Type Error",
+          "description": "Parameter 'p' must be a number!"
+        },
+        {
+          "type": "error",
+          "code": "400",
+          "title": "Invalid Type Error",
+          "description": "Limit must be a number!"
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found Error",
+          "description": "Requested page [num] exceded page count! Occurs when p query parameter is set to higher than the max page count."
         }
       ]
     },
