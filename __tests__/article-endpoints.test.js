@@ -40,7 +40,7 @@ describe("GET: /api/articles", () => {
         expect(body.articles).toHaveLength(13);
       });
   });
-  test("200: Each article object has props: title, topic, author, body, created_at, votes, article_img_url", () => {
+  test("200: Each article object has props: title, topic, author, created_at, votes, article_img_url", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -49,7 +49,6 @@ describe("GET: /api/articles", () => {
           expect(article.title).toBeString();
           expect(article.topic).toBeString();
           expect(article.author).toBeString();
-          expect(article.body).toBeString();
           expect(article.created_at).toBeString();
           expect(article.votes).toBeNumber();
           expect(article.article_img_url).toBeString();

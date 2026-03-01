@@ -35,7 +35,6 @@
       "resBody": {
         "articles": [
           {
-            "comment_count": "[number as a string]",
             "article_id": "[number]",
             "title": "[string]",
             "topic": "[string]",
@@ -43,7 +42,8 @@
             "body": "[string]",
             "created_at": "[string]",
             "votes": "[number]",
-            "article_img_url": "[string]"
+            "article_img_url": "[string]",
+            "comment_count": "[number as a string]"
           }
         ],
         "total_count": "[number]"
@@ -266,7 +266,7 @@
       "method": "PATCH",
       "endpoint": "/api/articles/:article_id",
       "description": "This endpoint updated the votes for a specified article, and returns the updated article object in the response body.",
-      "reqBody": { "inc_votes": ["integer"] },
+      "reqBody": { "inc_votes": "[integer]" },
       "resBody": {
         "article": {
           "comment_count": "[number as a string]",
@@ -274,7 +274,6 @@
           "title": "[string]",
           "topic": "[string]",
           "author": "[string]",
-          "body": "[string]",
           "created_at": "[string]",
           "votes": "[number]",
           "article_img_url": "[string]"

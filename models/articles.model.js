@@ -26,11 +26,23 @@ exports.fetchAllArticles = async (
   const query =
     topic ?
       format(
-        `SELECT * FROM articles
-        WHERE topic = %L
-        ORDER BY %s %s
-        LIMIT %s
-        OFFSET %s`,
+        `SELECT
+          articles.article_id,
+          articles.title,
+          articles.topic,
+          articles.author,
+          articles.created_at,
+          articles.votes,
+          articles.article_img_url,
+          COUNT(comment_id) AS comment_count
+      FROM 
+        articles
+        LEFT JOIN comments ON comments.article_id = articles.article_id 
+      WHERE topic = %L
+      GROUP BY articles.article_id
+      ORDER BY %s %s
+      LIMIT %s
+      OFFSET %s`,
         topic,
         sort_by,
         order,
@@ -39,7 +51,19 @@ exports.fetchAllArticles = async (
       )
     : format(
         `
-      SELECT * FROM articles
+      SELECT
+        articles.article_id,
+        articles.title,
+        articles.topic,
+        articles.author,
+        articles.created_at,
+        articles.votes,
+        articles.article_img_url,
+        COUNT(comment_id) AS comment_count
+      FROM
+        articles
+        LEFT JOIN comments ON comments.article_id = articles.article_id 
+      GROUP BY articles.article_id
       ORDER BY %s %s
       LIMIT %s
       OFFSET %s`,
