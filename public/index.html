@@ -1,104 +1,97 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Zsolt's NC-NEWS API documentation</title>
-    <link rel="stylesheet" href="stylesheet.css" />
-    <script src="./script.js" defer></script>
-  </head>
-  <body>
-    <header>
-      <h1>Zsolt's NC-NEWS API Documentation 🔌</h1>
-      <p>
-        This documentation explains each endpoint of this API, how they work,
-        what they return etc. This information is also available in raw json
-        format here:
-        <a href="./data.json" target="_blank" aria-label="Raw json format"
-          >/api/data.json</a
-        >
-      </p>
-    </header>
 
-    <template id="endpoint-template">
-      <div>
-        <h2></h2>
-        <h3 class="description"></h3>
-        <p class="description"></p>
-        <h3 class="query-params"></h3>
-        <div class="query-params-container"></div>
-        <h3 class="req-body"></h3>
-        <pre><code class="req-body"></code></pre>
-        <h3 class="res-body"></h3>
-        <pre><code class="res-body"></code></pre>
-        <h3 class="status-codes"></h3>
-        <div class="status-codes-container"></div>
-      </div>
-    </template>
-    <template id="query-params-template">
-      <div>
-        <p class="qp-example"></p>
-        <p class="qp-description"></p>
-      </div>
-    </template>
-    <template id="status-template">
-      <div>
-        <p class="status-code"></p>
-        <p class="status-title"></p>
-        <p class="status-description"></p>
-      </div>
-    </template>
-    <template id="not-available">
-      <div>
-        <p>Not Available</p>
-      </div>
-    </template>
-    <template id="nav-template">
-      <li>
-        <a>
-          <span class="part1"></span>
-          <span class="part2"></span>
-        </a>
-      </li>
-    </template>
-    <nav>
-      <ul></ul>
-    </nav>
-    <main>
-      <div id="endpoints-container"></div>
-    </main>
-    <footer>
-      <hr />
-      <p>
-        Built with JavaScript, Express and PostgreSQL. Fully tested with Jest.
-        Frontend coming soon.
-      </p>
-      <div class="git-handle">
-        <svg
-          aria-hidden="true"
-          height="24"
-          viewBox="0 0 24 24"
-          version="1.1"
-          width="24"
-          data-view-component="true"
-          class="octicon octicon-mark-github"
-        >
-          <path
-            d="M12 1C5.923 1 1 5.923 1 12c0 4.867 3.149 8.979 7.521 10.436.55.096.756-.233.756-.522 0-.262-.013-1.128-.013-2.049-2.764.509-3.479-.674-3.699-1.292-.124-.317-.66-1.293-1.127-1.554-.385-.207-.936-.715-.014-.729.866-.014 1.485.797 1.691 1.128.99 1.663 2.571 1.196 3.204.907.096-.715.385-1.196.701-1.471-2.448-.275-5.005-1.224-5.005-5.432 0-1.196.426-2.186 1.128-2.956-.111-.275-.496-1.402.11-2.915 0 0 .921-.288 3.024 1.128a10.193 10.193 0 0 1 2.75-.371c.936 0 1.871.123 2.75.371 2.104-1.43 3.025-1.128 3.025-1.128.605 1.513.221 2.64.111 2.915.701.77 1.127 1.747 1.127 2.956 0 4.222-2.571 5.157-5.019 5.432.399.344.743 1.004.743 2.035 0 1.471-.014 2.654-.014 3.025 0 .289.206.632.756.522C19.851 20.979 23 16.854 23 12c0-6.077-4.922-11-11-11Z"
-          ></path>
-        </svg>
-        <a target="_blank" href="https://github.com/zsolt-wvdrppr"
-          >github.com/zsolt-wvdrppr</a
-        >
-      </div>
-      <p>
-        Copyright
-        <span class="date-year"
-          ><script type="text/JavaScript">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zsolt's NC-NEWS API documentation</title>
+  <link rel="stylesheet" href="stylesheet.css" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <script src="./script.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <h1>Zsolt's NC-NEWS API Documentation 🔌</h1>
+    <p>
+      This documentation explains each endpoint of this API, how they work,
+      what they return etc. This information is also available in raw json
+      format here:
+      <a href="./data.json" target="_blank" aria-label="Raw json format">/api/data.json</a>
+    </p>
+  </header>
+
+  <template id="endpoint-template">
+    <div>
+      <h2></h2>
+      <h3 class="description"></h3>
+      <p class="description"></p>
+      <h3 class="query-params"></h3>
+      <div class="query-params-container"></div>
+      <h3 class="req-body"></h3>
+      <pre><code class="req-body"></code></pre>
+      <h3 class="res-body"></h3>
+      <pre><code class="res-body"></code></pre>
+      <h3 class="status-codes"></h3>
+      <div class="status-codes-container"></div>
+    </div>
+  </template>
+  <template id="query-params-template">
+    <div>
+      <p class="qp-example"></p>
+      <p class="qp-description"></p>
+    </div>
+  </template>
+  <template id="status-template">
+    <div>
+      <p class="status-code"></p>
+      <p class="status-title"></p>
+      <p class="status-description"></p>
+    </div>
+  </template>
+  <template id="not-available">
+    <div>
+      <p>Not Available</p>
+    </div>
+  </template>
+  <template id="nav-template">
+    <li>
+      <a>
+        <span class="part1"></span>
+        <span class="part2"></span>
+      </a>
+    </li>
+  </template>
+  <nav>
+    <ul></ul>
+  </nav>
+  <main>
+    <div id="endpoints-container"></div>
+  </main>
+  <footer>
+    <hr />
+    <p>
+      Built with JavaScript, Express and PostgreSQL. Fully tested with Jest.
+      Frontend coming soon.
+    </p>
+    <div class="git-handle">
+      <svg aria-hidden="true" height="24" viewBox="0 0 24 24" version="1.1" width="24" data-view-component="true"
+        class="octicon octicon-mark-github">
+        <path
+          d="M12 1C5.923 1 1 5.923 1 12c0 4.867 3.149 8.979 7.521 10.436.55.096.756-.233.756-.522 0-.262-.013-1.128-.013-2.049-2.764.509-3.479-.674-3.699-1.292-.124-.317-.66-1.293-1.127-1.554-.385-.207-.936-.715-.014-.729.866-.014 1.485.797 1.691 1.128.99 1.663 2.571 1.196 3.204.907.096-.715.385-1.196.701-1.471-2.448-.275-5.005-1.224-5.005-5.432 0-1.196.426-2.186 1.128-2.956-.111-.275-.496-1.402.11-2.915 0 0 .921-.288 3.024 1.128a10.193 10.193 0 0 1 2.75-.371c.936 0 1.871.123 2.75.371 2.104-1.43 3.025-1.128 3.025-1.128.605 1.513.221 2.64.111 2.915.701.77 1.127 1.747 1.127 2.956 0 4.222-2.571 5.157-5.019 5.432.399.344.743 1.004.743 2.035 0 1.471-.014 2.654-.014 3.025 0 .289.206.632.756.522C19.851 20.979 23 16.854 23 12c0-6.077-4.922-11-11-11Z">
+        </path>
+      </svg>
+      <a target="_blank" href="https://github.com/zsolt-wvdrppr">github.com/zsolt-wvdrppr</a>
+    </div>
+    <p>
+      Copyright
+      <span class="date-year">
+        <script type="text/JavaScript">
             document.write( new Date().getFullYear())
-          </script></span
-        >
-      </p>
-    </footer>
-  </body>
+          </script>
+      </span>
+    </p>
+  </footer>
+</body>
+
 </html>
