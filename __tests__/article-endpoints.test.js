@@ -294,7 +294,7 @@ describe("Model testing: updateVotesOfArticle()", () => {
 });
 
 describe("PATCH /api/articles/:article_id", () => {
-  test("201: Responds with an object", () => {
+  test("200: Responds with an object", () => {
     const newVote = 100;
     return request(app)
       .patch("/api/articles/1")
@@ -303,12 +303,12 @@ describe("PATCH /api/articles/:article_id", () => {
       })
       .set("Accept", "application/json")
       .expect("Content-Type", /application\/json/)
-      .expect(201)
+      .expect(200)
       .then((res) => {
         expect(res).toBeObject();
       });
   });
-  test("201: The returned article object should have props: article_id, title, topic, author, body, created_at, votes, article_img_url", () => {
+  test("200: The returned article object should have props: article_id, title, topic, author, body, created_at, votes, article_img_url", () => {
     const newVote = 100;
     return request(app)
       .patch("/api/articles/1")
@@ -317,7 +317,7 @@ describe("PATCH /api/articles/:article_id", () => {
       })
       .set("Accept", "application/json")
       .expect("Content-Type", /application\/json/)
-      .expect(201)
+      .expect(200)
       .then(({ body: { article } }) => {
         expect(article.article_id).toBe(1);
         expect(article.title).toBeString();
@@ -329,7 +329,7 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(article.article_img_url).toBeString();
       });
   });
-  test("201: The article's votes should be updated in the database", async () => {
+  test("200: The article's votes should be updated in the database", async () => {
     const queryResultBefore = await db.query(
       `SELECT * FROM articles WHERE article_id = $1`,
       [1],
@@ -343,7 +343,7 @@ describe("PATCH /api/articles/:article_id", () => {
       })
       .set("Accept", "application/json")
       .expect("Content-Type", /application\/json/)
-      .expect(201)
+      .expect(200)
       .then(async ({ body: { article: article } }) => {
         const queryResult = await db.query(
           `SELECT * FROM articles WHERE article_id = $1`,

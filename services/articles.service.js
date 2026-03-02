@@ -2,6 +2,7 @@ const BadRequestError = require("../errors/BadRequestError");
 const InvalidTypeError = require("../errors/InvalidTypeError");
 const NotFoundError = require("../errors/NotFoundError");
 const ServerError = require("../errors/ServerError");
+const UnprocessableError = require("../errors/UnprocessableError");
 const {
   fetchAllArticles,
   fetchArticleById,
@@ -59,6 +60,8 @@ exports.getCommentsByArticleId = async (article_id, limit = 10, p = 1) => {
 };
 
 exports.addCommentToArticle = async (article_id, username, body) => {
+  if (!username) throw new UnprocessableError("Missing username!");
+
   await validateArticleId(article_id);
   await validateUsername(username);
 
@@ -78,7 +81,9 @@ exports.incVotesByArticleId = async (article_id, body) => {
     throw new BadRequestError("Invalid key!");
   if (!parseInt(body.inc_votes))
     throw new BadRequestError("Increment amount must be a number!");
-  return await updateVotesOfArticle(article_id, body);
+  const response = await updateVotesOfArticle(article_id, body);
+  if (!response) throw new NotFoundError("Article not found!");
+  return response;
 };
 
 exports.postNewArticle = async (
