@@ -352,6 +352,18 @@
           "code": "404",
           "title": "Not Found Error",
           "description": "Comment not found"
+        },
+        {
+          "type": "error",
+          "code": "404",
+          "title": "Not Found Error",
+          "description": "User not found"
+        },
+        {
+          "type": "error",
+          "code": "422",
+          "title": "Not Found Error",
+          "description": "Missing username"
         }
       ]
     },
